@@ -3,11 +3,10 @@ using System.Linq;
 using System.Data.Linq;
 using System.Data.SqlClient;
 using System.Data.Linq.Mapping;
-using static TelegramDating.Database;
 
 namespace TelegramDating
 {
-    public static class DatabaseShit
+    public static class Database
     {
         // private static string connect = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Database.mdf;Integrated Security=True";
 
