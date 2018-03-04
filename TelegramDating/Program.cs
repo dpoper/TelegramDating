@@ -18,9 +18,14 @@ namespace TelegramDating
 
         static void Main(string[] args)
         {
+            // Database.AddTest();
+
+            DatabaseShit.Test();
+
             Bot.OnMessage += BotOnMessageReceived;
 
-
+            
+            Console.ReadKey();
         }
 
         private static async void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
@@ -32,7 +37,7 @@ namespace TelegramDating
 
             if (message.Text == "/start")
             {
-                bool UserIsNew = Database.ContainsUser(message.Chat.Id); // Пока что. А так оно должно спрашивать у БД, есть ли там такой юзер.
+                bool UserIsNew = DatabaseShit.ContainsUser(message.Chat.Id); // Пока что. А так оно должно спрашивать у БД, есть ли там такой юзер.
 
                 if (UserIsNew)
                     Bot.Welcome(message.Chat.Id);
