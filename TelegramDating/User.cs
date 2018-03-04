@@ -30,11 +30,6 @@ namespace TelegramDating
         // whosex
         // whoage
 
-        public User()
-        {
-
-        }
-
         public User(int Id, string Name, int Age, int Sex, int Photo)
         {
             this.Id = Id;

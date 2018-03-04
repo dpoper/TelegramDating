@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Linq;
 using System.Linq;
 using Telegram.Bot;
 using Telegram.Bot.Args;
@@ -20,7 +21,22 @@ namespace TelegramDating
         {
             // Database.AddTest();
 
-            Database.Test();
+
+            //DataContext db = new DataContext(Database.ConnectLink);
+
+            // Получаем таблицу пользователей
+            //Table<User> users = db.GetTable<User>();
+            var user = new User(1, "Хуй", 12, 0, 2);
+            Database.AddUser(user);
+            //foreach (var user in users)
+            //{
+            //    Console.WriteLine("{0} \t{1} \t{2}", user.Id, user.Name, user.Age);
+            //}
+
+
+
+
+            //Database.Test();
 
             Bot.OnMessage += BotOnMessageReceived;
 

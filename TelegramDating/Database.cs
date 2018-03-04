@@ -10,14 +10,14 @@ namespace TelegramDating
     {
         // private static string connect = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Database.mdf;Integrated Security=True";
 
-        private static string connect = TelegramDating.Properties.Settings.Default.DatabaseConnectionString;
+        public static string ConnectLink { get; } = TelegramDating.Properties.Settings.Default.DatabaseConnectionString;
         
-        private static DataContext DB = new DataContext(connect);
+       // private static DataContext DB = new DataContext(ConnectLink);
         
-        private static Table<User> Users { get; } = DB.GetTable<User>();
+        //private static Table<User> Users { get; } = DB.GetTable<User>();
 
         // private static 
-
+        /*
         public static void Test()
         {
 
@@ -33,14 +33,24 @@ namespace TelegramDating
 
             Users.InsertOnSubmit(user);
         }
-
+        */
         /// <summary>
         /// Add user to database.
         /// </summary>
         /// <param name="User"></param>
-        public static void AddUser(User User)
+        public static void AddUser(User user)
         {
-            throw new NotImplementedException();
+            SqlConnection cn = new SqlConnection(global::TelegramDating.Properties.Settings.Default.DatabaseConnectionString);
+            try
+            {
+                string sql = $"INSERT INTO Users(Name, Age, Sex, Photo) values({user.Name}, {user.Age}, {user.Sex}, {user.Photo})";
+                SqlCommand exeSql = new SqlCommand(sql, cn);
+                exeSql.ExecuteNonQuery();
+            }
+            catch
+            {
+                Exception ex;
+            }
         }
 
         // Пока не придумал, по какому па
