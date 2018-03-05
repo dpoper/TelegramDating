@@ -6,31 +6,30 @@ namespace TelegramDating
     [Table(Name = "Users")]
     public class User
     {
-        [Column(IsPrimaryKey = true, IsDbGenerated = true)]
-        public int Id { get; }
+        [Column(Name = "Id", AutoSync = AutoSync.OnInsert, IsPrimaryKey = true, 
+            IsDbGenerated = true, UpdateCheck = UpdateCheck.Never)]
+        public int Id { get; set; }
 
         [Column]
-        public string Name { get; }
+        public string Name { get; set; }
 
         [Column]
-        public int Age { get; }
-
-        // [Column]
-        // public Sex    Sex    { get; }
-
-        [Column]
-        public int Sex { get; }
+        public int Age { get; set; }
+        
+        [Column(DbType = "bit")]
+        public byte Sex { get; set; }
 
         [Column]
-        public int Photo { get; }
+        public int Photo { get; set; }
 
         // state
         // city
 
         // whosex
         // whoage
-
-        public User(int Id, string Name, int Age, int Sex, int Photo)
+        
+        
+        public User(int Id, string Name, int Age, byte Sex, int Photo)
         {
             this.Id = Id;
             this.Name = Name;
@@ -41,9 +40,11 @@ namespace TelegramDating
             // Database.AddUser(this);
         }
 
+        /// <summary>
+        /// Constructor for LINQ mapping.
+        /// </summary>
+        public User() { }
+
 
     }
-
-
-    public enum Sex { Female, Male }
 }

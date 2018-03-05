@@ -28,9 +28,20 @@ namespace TelegramDating.Properties {
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database.mdf;" +
             "Integrated Security=True")]
-        public string DatabaseConnectionString {
+        public string DatabaseConnection {
             get {
-                return ((string)(this["DatabaseConnectionString"]));
+                return ((string)(this["DatabaseConnection"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|..\\..\\Database.mdf;Integrate" +
+            "d Security=True")]
+        public string DatabaseDebugConnection {
+            get {
+                return ((string)(this["DatabaseDebugConnection"]));
             }
         }
     }
