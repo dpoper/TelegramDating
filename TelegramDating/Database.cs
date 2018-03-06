@@ -10,42 +10,21 @@ namespace TelegramDating
     {
         public static string ConnectLink { get; } = Properties.Settings.Default.DatabaseConnection;
 
-        private static DataContext DB;
+        private static DataContext DB = new DataContext(ConnectLink);
+        private static Table<User> UsersTable = DB.GetTable<User>();
         // private static Table<User> UsersTable = DB.GetTable<User>();
 
-        public static void Test()
+        public static void Show()
         {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-                Console.BackgroundColor = ConsoleColor.Red;
-                Console.WriteLine("ПИЗДОС");
-                Console.ResetColor();
-            }
-
-
-        }
-
-        public static void AddTest()
-        {
-
-
-            var user = new User(4, "Dik", 11, 0, 124124);
-
             try
             {
                 DB = new DataContext(ConnectLink);
                 Table<User> UsersTable = DB.GetTable<User>();
-                UsersTable.InsertOnSubmit(user);
-                UsersTable.Context.SubmitChanges();
-                Console.WriteLine(UsersTable.First().Name);
-            } catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+
+                var s = string.Join("\n", UsersTable.Select(u => u.Name).ToList());
+
+                Console.WriteLine(s);
+            } catch (Exception ex) { Console.WriteLine(ex.Message); }
 
         }
 
@@ -55,15 +34,20 @@ namespace TelegramDating
         /// <param name="User"></param>
         public static void AddUser(User user)
         {
-
+            try
+            {
+                
+                UsersTable.InsertOnSubmit(user);
+                UsersTable.Context.SubmitChanges();
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
 
 
         }
-
-        // Пока не придумал, по какому па
+        
         public static bool ContainsUser(User User)
         {
-            throw new NotImplementedException();
+            
         }
 
         public static bool ContainsUser(long UserId)

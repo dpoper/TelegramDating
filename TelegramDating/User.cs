@@ -8,10 +8,16 @@ namespace TelegramDating
     {
         [Column(Name = "Id", AutoSync = AutoSync.OnInsert, IsPrimaryKey = true, 
             IsDbGenerated = true, UpdateCheck = UpdateCheck.Never)]
-        public int Id { get; set; }
+        public int Id { get; private set; }
 
         [Column]
         public string Name { get; set; }
+
+        [Column]
+        public string Nickname { get; set; }
+
+        [Column]
+        public int State { get; set; }
 
         [Column]
         public int Age { get; set; }
@@ -22,16 +28,17 @@ namespace TelegramDating
         [Column]
         public int Photo { get; set; }
 
+
+
         // state
         // city
-
-        // whosex
-        // whoage
+        
+            
         
         
-        public User(int Id, string Name, int Age, byte Sex, int Photo)
+        public User(string Name, int Age, byte Sex, int Photo)
         {
-            this.Id = Id;
+            // this.Id = Id;
             this.Name = Name;
             this.Age = Age;
             this.Sex = Sex;

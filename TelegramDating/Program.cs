@@ -19,9 +19,7 @@ namespace TelegramDating
 
         static void Main(string[] args)
         {
-
-            Database.AddTest();
-            
+            Database.Show();
 
             // Database.AddUser(new User(1, "1", 24, 0, 151));
             // Bot.OnMessage += BotOnMessageReceived;
