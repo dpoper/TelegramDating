@@ -1,12 +1,5 @@
 ﻿namespace TelegramDating
 {
-    public enum State
-    {
-        Create,
-        Edit,
-        Search
-    }
-
     public static class SearchOptions
     {
         public enum Sex

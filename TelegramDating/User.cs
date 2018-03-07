@@ -7,7 +7,7 @@ namespace TelegramDating
     {
         [Column(Name = "Id", AutoSync = AutoSync.OnInsert, IsPrimaryKey = true, 
             IsDbGenerated = true, UpdateCheck = UpdateCheck.Never)]
-        public int Id { get; private set; }
+        public int Id { get; set; }
         
         /// <summary>
         /// Name that will be displayed to the person who found this user.
@@ -75,17 +75,6 @@ namespace TelegramDating
         /// </summary>
         [Column]
         public int State { get; set; }
-
-        public User(string Name, int Age, bool Sex, int Photo)
-        {
-            // this.Id = Id;
-            this.Name = Name;
-            this.Age = Age;
-            this.Sex = Sex;
-            this.Photo = Photo;
-            
-            // Database.AddUser(this);
-        }
 
         /// <summary>
         /// Constructor for LINQ mapping.

@@ -10,7 +10,18 @@ namespace TelegramDating
                 ChatId,
                 "Здарова ебать ты знакомств ищешь неудачник сколько тебе лет");
 
+            // Тут добавим сразу пустого юзера в таблицу, дальше тупо меняем ему State
+
+            var a = new User()
+            {
+                Name = "Anton",
+                Age = 19,
+                // ...
+
+                State = (int) State.Create.Name
+            };
             
+            // Типа того
 
         }
 

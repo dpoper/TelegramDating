@@ -38,6 +38,8 @@ namespace TelegramDating
         /// <param name="User"></param>
         public static void AddUser(User user)
         {
+            user.Id = NewId;
+
             try
             {
                 UsersTable.InsertOnSubmit(user);
