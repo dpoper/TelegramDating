@@ -6,10 +6,16 @@ namespace TelegramDating
 {
     public static class Database
     {
-        public static string ConnectLink { get; } = Properties.Settings.Default.DatabaseConnection;
+        #region Database Variables
+
+        public static string ConnectLink { get; } = @"Data Source=(LocalDB)\MSSQLLocalDB;" +
+                                                    @"AttachDbFilename=|DataDirectory|\Database.mdf;" +
+                                                    @"Integrated Security=True";
 
         private static DataContext DB = new DataContext(ConnectLink);
         private static Table<User> UsersTable = DB.GetTable<User>();
+
+        #endregion
 
         private static int NewId { get => UsersTable.Count(); }
 
