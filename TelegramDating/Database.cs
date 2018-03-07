@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Data.Linq;
-using System.Data.SqlClient;
-using System.Collections.Generic;
 
 namespace TelegramDating
 {
@@ -12,18 +10,18 @@ namespace TelegramDating
 
         private static DataContext DB = new DataContext(ConnectLink);
         private static Table<User> UsersTable = DB.GetTable<User>();
-        // private static Table<User> UsersTable = DB.GetTable<User>();
 
+        private static int NewId { get => UsersTable.Count(); }
+
+        /// <summary>
+        /// Print users from table.
+        /// </summary>
         public static void Show()
         {
             try
             {
-                DB = new DataContext(ConnectLink);
-                Table<User> UsersTable = DB.GetTable<User>();
-
-                var s = string.Join("\n", UsersTable.Select(u => u.Name).ToList());
-
-                Console.WriteLine(s);
+                var str = string.Join("\n", UsersTable.Select(u => u.Name).ToList());
+                Console.WriteLine(str);
             } catch (Exception ex) { Console.WriteLine(ex.Message); }
 
         }
@@ -36,7 +34,6 @@ namespace TelegramDating
         {
             try
             {
-                
                 UsersTable.InsertOnSubmit(user);
                 UsersTable.Context.SubmitChanges();
             }
@@ -44,17 +41,18 @@ namespace TelegramDating
 
 
         }
+
+        /// <summary>
+        /// Checks whether table contains user.
+        /// </summary>
+        /// <param name="Username">e.g durov (without '@' symbol)</param>
+        /// <returns></returns>
+        public static bool ContainsUser(string Username) => UsersTable
+                                                            .Where(user => user.Username == Username)
+                                                            .Count() > 0;
         
-        public static bool ContainsUser(User User)
-        {
-            
-        }
 
-        public static bool ContainsUser(long UserId)
-        {
 
-            //throw new NotImplementedException();
-            return false;
-        }
+        
     }
 }

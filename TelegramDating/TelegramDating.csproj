@@ -76,11 +76,6 @@
     </Compile>
     <Compile Include="Tasks.cs" />
     <Compile Include="User.cs" />
-    <Compile Include="UsersSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UsersSet.xsd</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -88,17 +83,6 @@
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="UsersSet.xsc">
-      <DependentUpon>UsersSet.xsd</DependentUpon>
-    </None>
-    <None Include="UsersSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>UsersSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="UsersSet.xss">
-      <DependentUpon>UsersSet.xsd</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>

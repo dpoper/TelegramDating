@@ -2,6 +2,9 @@
 {
     public class Photo
     {
+        /// <summary>
+        /// Photo id from Telegram servers.
+        /// </summary>
         public int Id { get; }
         public string URL { get { return $"/{Id}.jpg"; } }
         

@@ -1,17 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TelegramDating
+﻿namespace TelegramDating
 {
-    public enum State : int
+    public enum State
     {
         Create,
         Edit,
-        Search,
-        
-        
+        Search
+    }
+
+    public static class SearchOptions
+    {
+        public enum Sex
+        {
+            Same = 0,
+            Opposite = 1,
+            Any = 2
+        }
+            
+        public enum City
+        {
+            Same = 4,
+            Any = 8
+        }
     }
 }

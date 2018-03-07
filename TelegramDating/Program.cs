@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Linq;
-using System.Linq;
 using Telegram.Bot;
 using Telegram.Bot.Args;
-using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.InlineKeyboardButtons;
-using Telegram.Bot.Types.InlineQueryResults;
-using Telegram.Bot.Types.InputMessageContents;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace TelegramDating
 {
@@ -37,7 +29,7 @@ namespace TelegramDating
 
             if (message.Text == "/start")
             {
-                bool UserIsNew = Database.ContainsUser(message.Chat.Id); // Пока что. А так оно должно спрашивать у БД, есть ли там такой юзер.
+                bool UserIsNew = Database.ContainsUser(message.From.Username);
 
                 if (UserIsNew)
                     Bot.Welcome(message.Chat.Id);
