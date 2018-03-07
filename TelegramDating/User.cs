@@ -22,14 +22,6 @@ namespace TelegramDating
         public string Username { get; set; }
 
         /// <summary>
-        /// Current user's state. 
-        ///  
-        /// E.g creating profile/searching for people/...
-        /// </summary>
-        [Column]
-        public int State { get; set; }
-
-        /// <summary>
         /// Current user's current age.
         /// </summary>
         [Column]
@@ -42,6 +34,18 @@ namespace TelegramDating
         /// Female = False
         /// </summary>
         public bool Sex { get; set; }
+
+        /// <summary>
+        /// Country name.
+        /// </summary>
+        [Column]
+        public string Country { get; set; }
+
+        /// <summary>
+        /// City name.
+        /// </summary>
+        [Column]
+        public string City { get; set; }
 
         /// <summary>
         /// Photo id from telegram server.
@@ -58,23 +62,19 @@ namespace TelegramDating
         public int SearchOptions { get; set; }
 
         /// <summary>
-        /// Country name.
-        /// </summary>
-        [Column]
-        public string Country { get; set; }
-
-        /// <summary>
-        /// City name.
-        /// </summary>
-        [Column]
-        public string City { get; set; }
-
-        /// <summary>
         /// Preferred age. '-' symbol as delimiter.
         /// E.g "18-23"
         /// </summary>
         [Column]
         public string SearchAge { get; set; }
+
+        /// <summary>
+        /// Current user's state. 
+        ///  
+        /// E.g creating profile/searching for people/...
+        /// </summary>
+        [Column]
+        public int State { get; set; }
 
         public User(string Name, int Age, bool Sex, int Photo)
         {
