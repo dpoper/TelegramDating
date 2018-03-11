@@ -13,11 +13,11 @@ namespace TelegramDating
                                                     @"Integrated Security=True";
 
         private static DataContext DB = new DataContext(ConnectLink);
-        private static Table<User> UsersTable = DB.GetTable<User>();
+        public static Table<User> UsersTable = DB.GetTable<User>();
 
         #endregion
 
-        private static int NewId { get => UsersTable.Count(); }
+        public static int NextId { get => UsersTable.Count(); }
 
         /// <summary>
         /// Print users from table.
@@ -33,21 +33,23 @@ namespace TelegramDating
         }
 
         /// <summary>
-        /// Add user to database.
+        /// Add user into database.
         /// </summary>
-        /// <param name="User"></param>
-        public static void AddUser(User user)
+        /// <param name="user"></param>
+        /// <returns>True if OK.</returns>
+        public static bool AddUser(User user)
         {
-            user.Id = NewId;
-
             try
             {
                 UsersTable.InsertOnSubmit(user);
                 UsersTable.Context.SubmitChanges();
+                return true;
             }
-            catch (Exception ex) { Console.WriteLine(ex.Message); }
-
-
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
 
         /// <summary>
