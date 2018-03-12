@@ -13,6 +13,6 @@ namespace TelegramDating.Models.Commands
         public override string Name => throw new NotImplementedException();
 
         public override async Task Execute(Message message, TelegramBotClient client)
-            => client.SendTextMessageAsync(message.Chat.Id, "Нет такой команды, товарищ!");
+            => await client.SendTextMessageAsync(message.Chat.Id, "Нет такой команды, товарищ!");
     }
 }

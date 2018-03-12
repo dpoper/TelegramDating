@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Telegram.Bot;
 using BotClient = TelegramDating.Models.Bot;
 
 namespace TelegramDating
@@ -11,10 +10,11 @@ namespace TelegramDating
 
         static async Task Main(string[] args)
         {
-            Database.Show();
+            Console.Title = "Telegram Dating Bot <3";
+            Console.SetWindowSize(80, 20);
 
             var Bot = await BotClient.Get();
-            var me = await Bot.GetMeAsync();
+            Console.WriteLine("Listening...");
 
             Console.ReadKey();
         }

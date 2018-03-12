@@ -1,20 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using Telegram.Bot;
 using Telegram.Bot.Args;
-using TelegramDating.Models;
+using Telegram.Bot.Types;
 using TelegramDating.Models.Commands;
 
 namespace TelegramDating.Models
 {
-    public static class Bot
+    public static partial class Bot
     {
         private static TelegramBotClient client;
         private static List<Command> commandList;
         
         public static IReadOnlyList<Command> Commands { get => commandList.AsReadOnly(); }
              
+        /// <summary>
+        /// Create instance of bot.
+        /// </summary>
+        /// <returns></returns>
         public static async Task<TelegramBotClient> Get()
         {
             if (client != null) return client;
@@ -29,29 +34,10 @@ namespace TelegramDating.Models
 
             // await client.SetWebhookAsync();
             client.StartReceiving();
-            client.OnMessage += ExecuteCommands;
+            client.OnMessage += HandleMessage;
 
             return client;
 
-        }
-
-        public static async void ExecuteCommands(object sender, MessageEventArgs messageEventArgs)
-        {
-            var Client = sender as TelegramBotClient;
-            var Message = messageEventArgs.Message;
-
-            foreach (var cmd in Commands)
-            {
-                if (cmd.Contains(Message.Text))
-                {
-                    await cmd.Execute(Message, Client);
-                    Console.WriteLine($"Команда: {cmd.Name} | {Message.Chat.Username}");
-                    return;
-                }
-            }
-
-            await new NoCommand().Execute(Message, Client);
-            Console.WriteLine($"Команда: ----- | {Message.Chat.Username}");
         }
 
     }

@@ -72,6 +72,7 @@
     <Compile Include="Models\Commands\ResetCommand.cs" />
     <Compile Include="Models\Commands\StartCommand.cs" />
     <Compile Include="Models\Enums\SearchOptions.cs" />
+    <Compile Include="Models\MessageHandler.cs" />
     <Compile Include="Models\Photo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

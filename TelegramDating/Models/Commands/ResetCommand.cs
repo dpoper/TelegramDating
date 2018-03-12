@@ -14,7 +14,7 @@ namespace TelegramDating.Models.Commands
 
         public override async Task Execute(Message message, TelegramBotClient client)
         {
-            // Тупо без действия
+            // Set state to Create.Name
         }
     }
 }

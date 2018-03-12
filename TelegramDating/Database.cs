@@ -26,11 +26,16 @@ namespace TelegramDating
         {
             try
             {
-                var str = string.Join("\n", UsersTable.Select(u => u.Name).ToList());
+                var str = string.Join("\n", UsersTable.Select(u => u.Username).ToList());
                 Console.WriteLine(str);
-            } catch (Exception ex) { Console.WriteLine(ex.Message); }
+            } catch (Exception ex) { Console.WriteLine("Show: " + ex.Message); }
 
         }
+
+        /// <summary>
+        /// Shortcut.
+        /// </summary>
+        public static void Submit() => UsersTable.Context.SubmitChanges();
 
         /// <summary>
         /// Add user into database.
@@ -42,12 +47,12 @@ namespace TelegramDating
             try
             {
                 UsersTable.InsertOnSubmit(user);
-                UsersTable.Context.SubmitChanges();
+                Database.Submit();
                 return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine("Пизда: " + ex.Message);
                 return false;
             }
         }
@@ -60,9 +65,21 @@ namespace TelegramDating
         public static bool ContainsUser(string Username) => UsersTable
                                                             .Where(user => user.Username == Username)
                                                             .Count() > 0;
-        
+
+        /// <summary>
+        /// Checks whether table contains user.
+        /// </summary>
+        /// <param name="Username">e.g durov (without '@' symbol)</param>
+        /// <returns></returns>
+        public static bool ContainsUser(long Id)          => UsersTable
+                                                            .Where(user => user.Id == Id)
+                                                            .Count() > 0;
+
+        public static User Get(long Id) => UsersTable.SingleOrDefault(user => user.Id == Id);
 
 
-        
+
+
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Data.Linq.Mapping;
+﻿using System;
+using System.Data.Linq.Mapping;
 using System.Linq;
 
 namespace TelegramDating
@@ -9,7 +10,7 @@ namespace TelegramDating
         /// <summary>
         /// Pass chat_id here.
         /// </summary>
-        [Column(Name = "Id", AutoSync = AutoSync.OnInsert, IsPrimaryKey = true)]
+        [Column(Name = "Id", IsPrimaryKey = true, IsDbGenerated = false)]
         public long Id { get; set; }
 
         /// <summary>
@@ -70,27 +71,14 @@ namespace TelegramDating
         /// </summary>
         [Column]
         public string SearchAge { get; set; }
-
+        
         /// <summary>
         /// Current user's state. 
         ///  
         /// E.g creating profile/searching for people/...
         /// </summary>
         [Column(Name = "State")]
-        public int State
-        {
-            get => this.State;
-            private set
-            {
-                var user = Database.UsersTable.First(u => u.Id == this.Id || u.Username == this.Username);
-                this.State = value;
-                user.State = value;
-
-                // Я не уверен, что оно сейвит. 
-                // если в var user ссылка на юзера из дб, то должно проканать.
-                Database.UsersTable.Context.SubmitChanges();
-            }
-        }
+        public int State { get; set; }
 
 
         /// <summary>
@@ -102,10 +90,12 @@ namespace TelegramDating
         /// Constructor for adding users into database.
         /// </summary>
         /// <param name="Id"></param>
-        public User(long Id)
+        public User(long Id, string Username)
         {
             this.Id = Id;
-            this.State = (int) TelegramDating.State.Create.Name;
+            this.Username = Username;
+
+            State = (int)TelegramDating.State.Create.Name;
         }
 
     }

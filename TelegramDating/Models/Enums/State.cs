@@ -2,7 +2,7 @@
 {
     public static class State
     {
-        public enum Create
+        public enum Create : int
         {
             Name = 1, // Start of the bot
             Age = 2,
@@ -12,7 +12,7 @@
             Photo = 6,
         }
 
-        public enum Search
+        public enum Search : int
         {
             // ...
         }
