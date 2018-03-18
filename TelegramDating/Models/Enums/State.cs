@@ -9,12 +9,12 @@
             Sex = 3,
             Country = 4,
             City = 5,
-            Photo = 6,
+            Picture = 6,
         }
 
         public enum Search : int
         {
-            // ...
+            Show = 11,
         }
     }
 }

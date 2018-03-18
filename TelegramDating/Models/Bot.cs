@@ -11,8 +11,11 @@ namespace TelegramDating.Models
 {
     public static partial class Bot
     {
+        const string FileURL = "https://api.telegram.org/file/bot{0}/{1}";
+
         private static TelegramBotClient client;
         private static List<Command> commandList;
+
         
         public static IReadOnlyList<Command> Commands { get => commandList.AsReadOnly(); }
              
@@ -20,11 +23,11 @@ namespace TelegramDating.Models
         /// Create instance of bot.
         /// </summary>
         /// <returns></returns>
-        public static async Task<TelegramBotClient> Get()
+        public static async Task<TelegramBotClient> Get(string Token)
         {
             if (client != null) return client;
 
-            client = new TelegramBotClient(Program.Token);
+            client = new TelegramBotClient(Token);
 
             commandList = new List<Command>() {
                 new StartCommand(),

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -12,7 +9,7 @@ namespace TelegramDating.Models.Commands
     {
         public override string Name => throw new NotImplementedException();
 
-        public override async Task Execute(Message message, TelegramBotClient client)
-            => await client.SendTextMessageAsync(message.Chat.Id, "Нет такой команды, товарищ!");
+        public override async Task Execute(Message Message, TelegramBotClient Client)
+            => await Client.SendTextMessageAsync(Message.Chat.Id, "Нет такой команды, товарищ!");
     }
 }

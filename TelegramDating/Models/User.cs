@@ -56,7 +56,7 @@ namespace TelegramDating
         /// Will be used as profile picture of current user.
         /// </summary>
         [Column]
-        public int Photo { get; set; }
+        public string PictureId { get; set; }
 
         /// <summary>
         /// Current user's preferences
@@ -97,6 +97,5 @@ namespace TelegramDating
 
             State = (int)TelegramDating.State.Create.Name;
         }
-
     }
 }

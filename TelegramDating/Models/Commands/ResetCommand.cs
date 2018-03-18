@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -12,9 +9,13 @@ namespace TelegramDating.Models.Commands
     {
         public override string Name => "/reset";
 
-        public override async Task Execute(Message message, TelegramBotClient client)
+        public override async Task Execute(Message Message, TelegramBotClient Client)
         {
-            // Set state to Create.Name
+            User currentUser = Database.Get(Message.Chat.Id);
+            currentUser.State = (int) State.Create.Name;
+            Database.Submit();
+
+            await Client.SendTextMessageAsync(Message.Chat.Id, "Давай заново. Как мне к тебе обращаться?");
         }
     }
 }

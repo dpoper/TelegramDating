@@ -17,8 +17,6 @@ namespace TelegramDating
 
         #endregion
 
-        public static int NextId { get => UsersTable.Count(); }
-
         /// <summary>
         /// Print users from table.
         /// </summary>

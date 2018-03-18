@@ -13,7 +13,7 @@ namespace TelegramDating
             Console.Title = "Telegram Dating Bot <3";
             Console.SetWindowSize(80, 20);
 
-            var Bot = await BotClient.Get();
+            var Bot = await BotClient.Get(Token);
             Console.WriteLine("Listening...");
 
             Console.ReadKey();

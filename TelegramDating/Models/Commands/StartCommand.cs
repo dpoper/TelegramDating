@@ -9,18 +9,20 @@ namespace TelegramDating.Models.Commands
     {
         public override string Name => "/start";
 
-        public override async Task Execute(Message message, TelegramBotClient client)
+        public override async Task Execute(Message Message, TelegramBotClient Client)
         {
-            if (Database.ContainsUser(message.Chat.Username))
+            if (Database.ContainsUser(Message.Chat.Username))
             {
-                await client.SendTextMessageAsync(message.Chat.Id, "толян ты ебанулся чтоли, ты уже в базе");
+                await Client.SendTextMessageAsync(Message.Chat.Id, "толян ты ебанулся чтоли, ты уже в базе");
+
+                // new HelpCommand.Execute();
                 return;
             }
 
-            var currentUser = new User(message.From.Id, message.From.Username);
+            var currentUser = new User(Message.From.Id, Message.From.Username);
             Database.AddUser(currentUser);
 
-            await client.SendTextMessageAsync(message.Chat.Id, "Привет! Как мне к тебе обращаться?");
+            await Client.SendTextMessageAsync(Message.Chat.Id, "Привет! Как мне к тебе обращаться?");
             
         }
     }
