@@ -1,6 +1,4 @@
-﻿using System;
-using System.Data.Linq.Mapping;
-using System.Linq;
+﻿using System.Data.Linq.Mapping;
 
 namespace TelegramDating
 {
@@ -10,7 +8,7 @@ namespace TelegramDating
         /// <summary>
         /// Pass chat_id here.
         /// </summary>
-        [Column(Name = "Id", IsPrimaryKey = true, IsDbGenerated = false)]
+        [Column(IsPrimaryKey = true, IsDbGenerated = false)]
         public long Id { get; set; }
 
         /// <summary>
@@ -63,21 +61,14 @@ namespace TelegramDating
         ///     (Sex, City)
         /// </summary>
         [Column]
-        public int SearchOptions { get; set; }
-
-        /// <summary>
-        /// Preferred age. '-' symbol as delimiter.
-        /// E.g "18-23"
-        /// </summary>
-        [Column]
-        public string SearchAge { get; set; }
+        public int SearchSex { get; set; }
         
         /// <summary>
         /// Current user's state. 
         ///  
         /// E.g creating profile/searching for people/...
         /// </summary>
-        [Column(Name = "State")]
+        [Column]
         public int State { get; set; }
 
 
@@ -95,7 +86,7 @@ namespace TelegramDating
             this.Id = Id;
             this.Username = Username;
 
-            State = (int)TelegramDating.State.Create.Name;
+            State = (int)TelegramDating.State.Create.Sex;
         }
     }
 }

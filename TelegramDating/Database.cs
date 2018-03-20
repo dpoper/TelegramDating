@@ -26,7 +26,8 @@ namespace TelegramDating
             {
                 var str = string.Join("\n", UsersTable.Select(u => u.Username).ToList());
                 Console.WriteLine(str);
-            } catch (Exception ex) { Console.WriteLine("Show: " + ex.Message); }
+            }
+            catch (Exception ex) { Console.WriteLine("Show: " + ex.Message); }
 
         }
 
@@ -40,7 +41,7 @@ namespace TelegramDating
         /// </summary>
         /// <param name="user"></param>
         /// <returns>True if OK.</returns>
-        public static bool AddUser(User user)
+        public static bool Add(User user)
         {
             try
             {
@@ -60,24 +61,15 @@ namespace TelegramDating
         /// </summary>
         /// <param name="Username">e.g durov (without '@' symbol)</param>
         /// <returns></returns>
-        public static bool ContainsUser(string Username) => UsersTable
-                                                            .Where(user => user.Username == Username)
-                                                            .Count() > 0;
+        public static bool Contains(string Username) => UsersTable.Count(user => user.Username == Username)> 0;
 
         /// <summary>
         /// Checks whether table contains user.
         /// </summary>
-        /// <param name="Username">e.g durov (without '@' symbol)</param>
+        /// <param name="Id">User's Telegram Id.</param>
         /// <returns></returns>
-        public static bool ContainsUser(long Id)          => UsersTable
-                                                            .Where(user => user.Id == Id)
-                                                            .Count() > 0;
+        public static bool Contains(long Id) => UsersTable.Count(user => user.Id == Id)> 0;
 
         public static User Get(long Id) => UsersTable.SingleOrDefault(user => user.Id == Id);
-
-
-
-
-
     }
 }

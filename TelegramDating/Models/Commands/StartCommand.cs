@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.InlineKeyboardButtons;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace TelegramDating.Models.Commands
 {
@@ -11,19 +13,27 @@ namespace TelegramDating.Models.Commands
 
         public override async Task Execute(Message Message, TelegramBotClient Client)
         {
-            if (Database.ContainsUser(Message.Chat.Username))
+            if (Database.Contains(Message.Chat.Username))
             {
                 await Client.SendTextMessageAsync(Message.Chat.Id, "толян ты ебанулся чтоли, ты уже в базе");
-
-                // new HelpCommand.Execute();
                 return;
             }
 
             var currentUser = new User(Message.From.Id, Message.From.Username);
-            Database.AddUser(currentUser);
+            Database.Add(currentUser);
 
-            await Client.SendTextMessageAsync(Message.Chat.Id, "Привет! Как мне к тебе обращаться?");
-            
+            var sexKeyboard = new InlineKeyboardMarkup(new[]
+                    {
+                        InlineKeyboardButton.WithCallbackData("Мальчик"),
+                        InlineKeyboardButton.WithCallbackData("Девочка"),
+                    });
+
+            await Client.SendTextMessageAsync(
+                        Message.Chat.Id,
+                        "А кто ты у нас?",
+                        replyMarkup: sexKeyboard
+                        );
+
         }
     }
 }

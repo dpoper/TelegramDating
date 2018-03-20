@@ -10,6 +10,7 @@
             Country = 4,
             City = 5,
             Picture = 6,
+            SearchSex = 7
         }
 
         public enum Search : int
