@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Telegram.Bot.Args;
+using TelegramDating.Database;
 
 namespace TelegramDating.Model.StateMachine
 {
@@ -10,6 +11,7 @@ namespace TelegramDating.Model.StateMachine
         {
             var client = await BotWorker.Get();
             var message = (msgArgs as MessageEventArgs).Message;
+            var userRepo = UserRepository.Initialize();
 
             currentUser.Name = message.Text;
 
@@ -19,6 +21,7 @@ namespace TelegramDating.Model.StateMachine
                             $"А сколько тебе лет?");
 
             currentUser.State = new StateAge();
+            userRepo.Submit();
         }
     }
 }

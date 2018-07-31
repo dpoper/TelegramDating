@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Telegram.Bot.Args;
+using TelegramDating.Database;
 using TelegramDating.Model.Enums;
 
 namespace TelegramDating.Model.StateMachine
@@ -11,6 +12,7 @@ namespace TelegramDating.Model.StateMachine
         {
             var client = await BotWorker.Get();
             var callback = (callbackArgs as CallbackQueryEventArgs).CallbackQuery;
+            var userRepo = UserRepository.Initialize();
 
             if (callback.Data == "m")
                 currentUser.SearchSex = SearchOptions.Sex.Male;
@@ -27,6 +29,8 @@ namespace TelegramDating.Model.StateMachine
 
             await client.SendTextMessageAsync(callback.From.Id,
                 "*типа поисковая панель и анкета рандом юзера с фоткой*");
+
+            userRepo.Submit();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Telegram.Bot.Args;
+using TelegramDating.Database;
 
 namespace TelegramDating.Model.StateMachine
 {
@@ -10,11 +11,13 @@ namespace TelegramDating.Model.StateMachine
         {
             var client = await BotWorker.Get(Program.Token);
             var message = (update as MessageEventArgs).Message;
-            
+            var userRepo = UserRepository.Initialize();
+
             currentUser.Country = message.Text;
             
             await client.SendTextMessageAsync(message.Chat.Id, "Хорошо! А город?");
             currentUser.State = new StateCity();
+            userRepo.Submit();
         }
     }
 }

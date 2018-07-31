@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Telegram.Bot.Args;
+using TelegramDating.Database;
 
 namespace TelegramDating.Model.StateMachine
 {
@@ -10,6 +11,7 @@ namespace TelegramDating.Model.StateMachine
         {
             var client = await BotWorker.Get(Program.Token);
             var message = (update as MessageEventArgs).Message;
+            var userRepo = UserRepository.Initialize();
 
             int Age;
             if (!(int.TryParse(message.Text, out Age) && Age > 0))
@@ -21,6 +23,7 @@ namespace TelegramDating.Model.StateMachine
             
             await client.SendTextMessageAsync(message.Chat.Id, "Ого! совсем уже взрослый. А ты из какой страны?");
             currentUser.State = new StateCountry();
+            userRepo.Submit();
         }
     }
 }

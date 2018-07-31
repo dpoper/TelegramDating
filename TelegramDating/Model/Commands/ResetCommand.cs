@@ -10,9 +10,13 @@ namespace TelegramDating.Model.Commands
 
         public override async Task Execute(Message message)
         {
+            var userRepo = UserRepository.Initialize();
             var client = await BotWorker.Get();
-            var user = UserRepository.Initialize().Get(message.Chat.Id);
+            var user = userRepo.Get(message.Chat.Id);
+
             user.State = new StateMachine.StateHello();
+            userRepo.Submit();
+
             await user.HandleState(System.EventArgs.Empty);
         }
     }

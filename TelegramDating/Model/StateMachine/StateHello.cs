@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types.ReplyMarkups;
+using TelegramDating.Database;
 
 namespace TelegramDating.Model.StateMachine
 {
@@ -11,6 +12,7 @@ namespace TelegramDating.Model.StateMachine
         {
             var client = await BotWorker.Get(Program.Token);
             var message = (update as MessageEventArgs).Message;
+            var userRepo = UserRepository.Initialize();
 
             // Start
             var sexKeyboard = new InlineKeyboardMarkup(new[]
@@ -26,6 +28,7 @@ namespace TelegramDating.Model.StateMachine
                         );
 
             currentUser.State = new StateSex();
+            userRepo.Submit();
         }
     }
 }

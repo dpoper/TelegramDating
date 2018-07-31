@@ -11,18 +11,18 @@ namespace TelegramDating.Model.Commands
         public override async Task Execute(Message message)
         {
             var client = await BotWorker.Get();
-            var database = UserRepository.Initialize();
+            var userRepo = UserRepository.Initialize();
 
-            if (database.Contains(message.Chat.Username))
+            if (userRepo.Contains(message.Chat.Username))
             {
                 await client.SendTextMessageAsync(message.Chat.Id, "ты уже в базе!");
                 return;
             }
 
             var currentUser = new User(message.From.Id, message.From.Username);
-            database.Add(currentUser);
+            userRepo.Add(currentUser);
 
-            var user = database.Get(message.From.Id);
+            var user = userRepo.Get(message.From.Id);
 
             user.State = new StateMachine.StateHello();
             await user.HandleState(System.EventArgs.Empty);

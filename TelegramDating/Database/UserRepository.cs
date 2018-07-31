@@ -4,7 +4,7 @@ using TelegramDating.Model;
 
 namespace TelegramDating.Database
 {
-    internal sealed class UserRepository : Repository<User>, IUserRepository
+    internal sealed class UserRepository : Repository<User>, IUserRepository, IDisposable
     {
         private static UserRepository _userRepo;
 
@@ -29,5 +29,9 @@ namespace TelegramDating.Database
         {
             throw new NotImplementedException();
         }
+
+        public int Submit() => Context.SaveChanges();
+
+        public void Dispose() => Context.Dispose();
     }
 }

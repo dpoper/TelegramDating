@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
+using TelegramDating.Database;
 
 namespace TelegramDating.Model.StateMachine
 {
@@ -13,6 +14,7 @@ namespace TelegramDating.Model.StateMachine
         {
             var client = await BotWorker.Get();
             var message = (msgArgs as MessageEventArgs).Message;
+            var userRepo = UserRepository.Initialize();
 
             if (message.Type != MessageType.Photo)
             {
@@ -40,6 +42,7 @@ namespace TelegramDating.Model.StateMachine
                         );
 
             currentUser.State = new StateSearchSex();
+            userRepo.Submit();
         }
     }
 }

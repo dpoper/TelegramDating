@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using TelegramDating.Database;
 using TelegramDating.Model;
 
 namespace TelegramDating
@@ -14,9 +15,12 @@ namespace TelegramDating
             Console.SetWindowSize(80, 20);
 
             var Bot = await BotWorker.Get(Token);
+            var DB = UserRepository.Initialize();
+
             Console.WriteLine("Listening...");
 
             Console.ReadKey();
+            DB.Dispose();
         }
 
     }
