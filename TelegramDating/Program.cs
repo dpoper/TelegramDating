@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using TelegramDating.Models;
+using TelegramDating.Model;
 
 namespace TelegramDating
 {
