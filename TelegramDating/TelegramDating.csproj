@@ -79,23 +79,24 @@
     <Compile Include="Database\UserContext.cs" />
     <Compile Include="Database\UserRepository.cs" />
     <Compile Include="Model\BotWorker.cs" />
-    <Compile Include="Model\Commands\Command.cs" />
-    <Compile Include="Model\Commands\NoCommand.cs" />
-    <Compile Include="Model\Commands\ResetCommand.cs" />
-    <Compile Include="Model\Commands\StartCommand.cs" />
+    <Compile Include="Model\Commands\ICommand.cs" />
+    <Compile Include="Model\Commands\Slash\NoCommand.cs" />
+    <Compile Include="Model\Commands\Slash\ResetCommand.cs" />
+    <Compile Include="Model\Commands\Slash\SlashCommand.cs" />
+    <Compile Include="Model\Commands\Slash\StartCommand.cs" />
     <Compile Include="Model\Enums\SearchOptions.cs" />
     <Compile Include="Model\MessageHandler.cs" />
-    <Compile Include="Model\StateMachine\IGotCallbackQuery.cs" />
-    <Compile Include="Model\StateMachine\StateAge.cs" />
-    <Compile Include="Model\StateMachine\StateCity.cs" />
-    <Compile Include="Model\StateMachine\StateCountry.cs" />
-    <Compile Include="Model\StateMachine\StateName.cs" />
-    <Compile Include="Model\StateMachine\StatePicture.cs" />
-    <Compile Include="Model\StateMachine\StateSearchSex.cs" />
-    <Compile Include="Model\StateMachine\StateSearchShow.cs" />
-    <Compile Include="Model\StateMachine\StateSex.cs" />
-    <Compile Include="Model\StateMachine\StateHello.cs" />
-    <Compile Include="Model\StateMachine\State.cs" />
+    <Compile Include="Model\Commands\ChatAction\IGotCallbackQuery.cs" />
+    <Compile Include="Model\Commands\ChatAction\ActionAge.cs" />
+    <Compile Include="Model\Commands\ChatAction\ActionCity.cs" />
+    <Compile Include="Model\Commands\ChatAction\ActionCountry.cs" />
+    <Compile Include="Model\Commands\ChatAction\ActionName.cs" />
+    <Compile Include="Model\Commands\ChatAction\ActionPicture.cs" />
+    <Compile Include="Model\Commands\ChatAction\ActionSearchSex.cs" />
+    <Compile Include="Model\Commands\ChatAction\ActionSearchShow.cs" />
+    <Compile Include="Model\Commands\ChatAction\ActionSex.cs" />
+    <Compile Include="Model\Commands\ChatAction\ActionHello.cs" />
+    <Compile Include="Model\Commands\ChatAction\IChatAction.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\User.cs" />
@@ -116,5 +117,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

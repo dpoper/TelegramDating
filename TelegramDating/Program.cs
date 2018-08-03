@@ -11,11 +11,12 @@ namespace TelegramDating
 
         static async Task Main()
         {
+            var DB = UserRepository.Initialize();
+
             Console.Title = "Telegram Dating Bot <3";
             Console.SetWindowSize(80, 20);
 
-            var Bot = await BotWorker.Get(Token);
-            var DB = UserRepository.Initialize();
+            var Bot = BotWorker.Get(Token);
 
             Console.WriteLine("Listening...");
 

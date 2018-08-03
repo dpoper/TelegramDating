@@ -20,9 +20,18 @@ namespace TelegramDating.Database
             return _userRepo;
         }
 
-        public bool Contains(long id)
+        public bool Contains(long userId)
         {
-            return this.Find(user => user.Id == id).Count() > 0;
+            var found = this.Find(user => user.UserId == userId);
+
+            Console.WriteLine("Fnd " + found.Count());
+
+            return found.Count() != 0;
+        }
+
+        public override User Get(long userId)
+        {
+            return Context.Set<User>().SingleOrDefault(user => user.UserId == userId);
         }
 
         public bool Contains(string username)

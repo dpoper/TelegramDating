@@ -1,16 +1,21 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Threading.Tasks;
 using TelegramDating.Model.Enums;
-using TelegramDating.Model.StateMachine;
 
 namespace TelegramDating.Model
 {
-    public class User
+    public sealed class User
     {
+        [Key]
+        [Column(Order = 0)]
+        public long Id { get; set; }
+
         /// <summary>
         /// Pass chat_id here.
         /// </summary>
-        public long Id { get; set; }
+        public long UserId { get; set; }
 
         /// <summary>
         /// Name that will be displayed to the person who found this user.
@@ -26,7 +31,7 @@ namespace TelegramDating.Model
         /// Current user's current age.
         /// </summary>
         public int Age { get; set; }
-        
+
         /// Current user's sex.
         /// 
         /// Male   = True
@@ -56,11 +61,9 @@ namespace TelegramDating.Model
         public SearchOptions.Sex SearchSex { get; set; }
 
         /// <summary>
-        /// Current user's state. 
-        ///  
-        /// E.g creating profile/searching for people/...
+        /// Current user's state id.
         /// </summary>
-        public State State { get; set; }
+        public int ChatActionId { get; set; } = 0;
 
         /// <summary>
         /// Constructor for LINQ mapping.
@@ -70,18 +73,16 @@ namespace TelegramDating.Model
         /// <summary>
         /// Constructor for adding users into database.
         /// </summary>
-        /// <param name="Id"></param>
-        public User(long Id, string Username)
+        /// <param name="UserId"></param>
+        public User(long UserId, string Username)
         {
-            this.Id = Id;
+            this.UserId = UserId;
             this.Username = Username;
-
-            State = new StateHello();
         }
 
-        public async Task HandleState(EventArgs msgOrCallback)
+        public async Task HandleAction(EventArgs msgOrCallback)
         {
-            await State.Handle(this, msgOrCallback);
+            await BotWorker.FindAction(ChatActionId)?.Execute(this, msgOrCallback);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using TelegramDating.Model;
 
 namespace TelegramDating.Database
@@ -10,5 +11,10 @@ namespace TelegramDating.Database
         }
 
         private DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

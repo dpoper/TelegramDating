@@ -15,13 +15,16 @@ namespace TelegramDating.Database
             Context = context;
         }
 
-        public TEntity Get(long id) => Context.Set<TEntity>().Find(id);
+        public virtual TEntity Get(long id)
+        {
+            return Context.Set<TEntity>().Find(id);
+        }
 
         public IEnumerable<TEntity> GetAll() => Context.Set<TEntity>().ToList();
 
-        public void Add(TEntity entity) => Context.Set<TEntity>().Add(entity);
+        public virtual void Add(TEntity entity) => Context.Set<TEntity>().Add(entity);
 
-        public void Remove(TEntity entity) => Context.Set<TEntity>().Remove(entity);
+        public virtual void Remove(TEntity entity) => Context.Set<TEntity>().Remove(entity);
 
         public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
             => Context.Set<TEntity>().Where(predicate);
