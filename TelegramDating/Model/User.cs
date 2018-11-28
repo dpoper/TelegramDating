@@ -73,16 +73,15 @@ namespace TelegramDating.Model
         /// <summary>
         /// Constructor for adding users into database.
         /// </summary>
-        /// <param name="UserId"></param>
-        public User(long UserId, string Username)
+        public User(long userId, string username)
         {
-            this.UserId = UserId;
-            this.Username = Username;
+            this.UserId = userId;
+            this.Username = username;
         }
 
         public async Task HandleAction(EventArgs msgOrCallback)
         {
-            await BotWorker.FindAction(ChatActionId)?.Execute(this, msgOrCallback);
+            await BotWorker.FindAction(ChatActionId).Execute(this, msgOrCallback);
         }
     }
 }

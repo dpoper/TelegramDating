@@ -1,27 +1,32 @@
 ﻿using System;
-using System.Threading.Tasks;
+using System.Linq;
+using Castle.Windsor.Installer;
+using Telegram.Bot;
 using TelegramDating.Database;
 using TelegramDating.Model;
+using TelegramDating.Model.Enums;
 
 namespace TelegramDating
 {
-    public static class Program
+    internal class Program
     {
         public const string Token = "540041724:AAG1Q-SsvKWqk4qzyH-0X2OtVDjsOJaZ9UE";
 
-        static async Task Main()
+        public static TelegramBotClient Bot { get; private set; }
+
+        public static void Main()
         {
-            var DB = UserRepository.Initialize();
-
             Console.Title = "Telegram Dating Bot <3";
-            Console.SetWindowSize(80, 20);
 
-            var Bot = BotWorker.Get(Token);
+            Container.Current.Install(new Installer());
 
-            Console.WriteLine("Listening...");
+            Bot = BotWorker.Get(Token);
+
+            var me = Bot.GetMeAsync().Result;
+
+            Console.WriteLine($"Listening: {me.FirstName}\n");
 
             Console.ReadKey();
-            DB.Dispose();
         }
 
     }

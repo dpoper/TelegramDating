@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace TelegramDating.Model.Commands.Slash
 {
-    public interface ISlashCommand : ICommand
+    /// <summary>
+    /// Command that starts with the slash ('/') character.
+    /// </summary>
+    public abstract class SlashCommand : Command
     {
-        string SlashText { get; }
+        public abstract string SlashText { get; }
     }
 }

@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Telegram.Bot.Args;
 
 namespace TelegramDating.Model.Commands.Slash
 {
-    class NoCommand : ISlashCommand
+    class NoCommand : SlashCommand
     {
-        public string SlashText => throw new NotImplementedException();
+        public override string SlashText => null;
 
-        public async Task Execute(User currentUser, EventArgs msgOrCallback)
+        public override async Task Execute(User currentUser, EventArgs msgOrCallback)
         {
-            var message = (msgOrCallback as MessageEventArgs).Message;
-
-            var client = BotWorker.Get();
-            await client.SendTextMessageAsync(message.Chat.Id, "Нет такой команды, товарищ!");
+            await Program.Bot.SendTextMessageAsync(msgOrCallback.ToMessage().Chat.Id, 
+                "Нет такой команды, товарищ!");
         }
     }
 }

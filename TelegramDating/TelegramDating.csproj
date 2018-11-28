@@ -49,6 +49,12 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.4.2.0\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Windsor.4.1.1\lib\net45\Castle.Windsor.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -60,8 +66,11 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -73,33 +82,34 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Database\IRepository.cs" />
-    <Compile Include="Database\IUsersRepository.cs" />
-    <Compile Include="Database\Repository.cs" />
+    <Compile Include="ChatActionExt.cs" />
+    <Compile Include="Container.cs" />
     <Compile Include="Database\UserContext.cs" />
-    <Compile Include="Database\UserRepository.cs" />
+    <Compile Include="Database\Installer.cs" />
     <Compile Include="Model\BotWorker.cs" />
-    <Compile Include="Model\Commands\ICommand.cs" />
+    <Compile Include="Model\Commands\Command.cs" />
     <Compile Include="Model\Commands\Slash\NoCommand.cs" />
     <Compile Include="Model\Commands\Slash\ResetCommand.cs" />
     <Compile Include="Model\Commands\Slash\SlashCommand.cs" />
     <Compile Include="Model\Commands\Slash\StartCommand.cs" />
+    <Compile Include="Model\Enums\ChatActionEnum.cs" />
     <Compile Include="Model\Enums\SearchOptions.cs" />
     <Compile Include="Model\MessageHandler.cs" />
-    <Compile Include="Model\Commands\ChatAction\IGotCallbackQuery.cs" />
-    <Compile Include="Model\Commands\ChatAction\ActionAge.cs" />
-    <Compile Include="Model\Commands\ChatAction\ActionCity.cs" />
-    <Compile Include="Model\Commands\ChatAction\ActionCountry.cs" />
-    <Compile Include="Model\Commands\ChatAction\ActionName.cs" />
-    <Compile Include="Model\Commands\ChatAction\ActionPicture.cs" />
-    <Compile Include="Model\Commands\ChatAction\ActionSearchSex.cs" />
-    <Compile Include="Model\Commands\ChatAction\ActionSearchShow.cs" />
-    <Compile Include="Model\Commands\ChatAction\ActionSex.cs" />
-    <Compile Include="Model\Commands\ChatAction\ActionHello.cs" />
-    <Compile Include="Model\Commands\ChatAction\IChatAction.cs" />
+    <Compile Include="Model\Commands\ChatActions\IGotCallbackQuery.cs" />
+    <Compile Include="Model\Commands\ChatActions\ActionAge.cs" />
+    <Compile Include="Model\Commands\ChatActions\ActionCity.cs" />
+    <Compile Include="Model\Commands\ChatActions\ActionCountry.cs" />
+    <Compile Include="Model\Commands\ChatActions\ActionName.cs" />
+    <Compile Include="Model\Commands\ChatActions\ActionPicture.cs" />
+    <Compile Include="Model\Commands\ChatActions\ActionSearchSex.cs" />
+    <Compile Include="Model\Commands\ChatActions\ActionSearchShow.cs" />
+    <Compile Include="Model\Commands\ChatActions\ActionSex.cs" />
+    <Compile Include="Model\Commands\ChatActions\ActionHello.cs" />
+    <Compile Include="Model\Commands\ChatActions\ChatAction.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\User.cs" />
+    <Compile Include="TelegramUpdateEventArgsExt.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

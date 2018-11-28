@@ -1,31 +1,27 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
-using Telegram.Bot.Args;
-using TelegramDating.Database;
-using TelegramDating.Model.Commands.Bot;
+using TelegramDating.Model.Commands.ChatActions;
 
 namespace TelegramDating.Model.Commands.Slash
 {
-    class ResetCommand : ISlashCommand
+    class ResetCommand : SlashCommand
     {
-        public string SlashText => "/reset";
+        public override string SlashText => "/reset";
 
-        public async Task Execute(User currentUser, EventArgs msgOrCallback)
+        public override async Task Execute(User currentUser, EventArgs msgOrCallback)
         {
             currentUser = null;
 
-            var message = (msgOrCallback as MessageEventArgs).Message;
-
-            var client = BotWorker.Get();
-            var userRepo = UserRepository.Initialize();
-
+            var message = msgOrCallback.ToMessage();
+            
             currentUser = new User(message.From.Id, message.From.Username);
-            userRepo.Add(currentUser);
+            this.DbContext.Users.Add(currentUser);
 
-            var user = userRepo.Get(message.From.Id);
+            var user = this.DbContext.Users.SingleOrDefault(u => u.Id == message.From.Id);
 
             user.ChatActionId = new ActionHello().Id;
-            userRepo.Submit();
+            this.DbContext.SaveChanges();
 
             await user.HandleAction(msgOrCallback);
         }
