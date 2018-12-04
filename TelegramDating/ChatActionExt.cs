@@ -10,6 +10,11 @@ namespace TelegramDating
     {
         private static Assembly Assembly { get; } = typeof(ChatAction).Assembly;
 
+        public static ChatActionEnum GetEnumFromId(int chatActionId)
+        {
+            return (ChatActionEnum) chatActionId;
+        }
+
         public static ChatActionEnum ToEnum(this Type chatAction)
         {
             return (ChatActionEnum) Enum.Parse(typeof(ChatActionEnum), chatAction.Name);
@@ -28,6 +33,11 @@ namespace TelegramDating
         public static bool IsCallbackQueryAction(this ChatActionEnum chatActionEnum)
         {
             return chatActionEnum.ToType().IsCallbackQueryAction();
+        }
+
+        public static bool IsCallbackQueryAction(int actionId)
+        {
+            return ((ChatActionEnum) actionId).IsCallbackQueryAction();
         }
     }
 }

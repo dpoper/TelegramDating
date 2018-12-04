@@ -8,16 +8,15 @@ namespace TelegramDating.Model.Commands.ChatActions
         public override int Id => 4;
 
         public override Type NextAction => typeof(ActionCity);
-        /// <inheritdoc />
+        
         protected override async Task HandleResponse(User currentUser, EventArgs messageArgs)
         {
-            currentUser.Country = messageArgs.ToMessage()?.Text;
+            currentUser.Country = messageArgs.ToMessage().Text;
         }
 
-        /// <inheritdoc />
         protected override async Task HandleAfter(User currentUser, EventArgs messageArgs)
         {
-            await Program.Bot.SendTextMessageAsync(messageArgs.ToMessage()?.Chat.Id, "Хорошо! А город?");
+            await Program.Bot.SendTextMessageAsync(messageArgs.ToMessage().Chat.Id, "Хорошо! А город?");
         }
     }
 }

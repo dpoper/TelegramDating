@@ -14,23 +14,27 @@ namespace TelegramDating.Model.Commands.Slash
         /// <param name="currentUser">Leave it null.</param>
         public override async Task Execute(User currentUser, EventArgs messageArgs)
         {
-            currentUser = null;
-
             var message = messageArgs.ToMessage();
 
-            Console.WriteLine(message.Chat.Id);
-            if (this.DbContext.Users.SingleOrDefault(u => u.UserId == message.Chat.Id) != null)
+            var foundUser = this.DbContext.Users.SingleOrDefault(u => u.UserId == message.Chat.Id);
+            if (foundUser != null)
             {
-                await Program.Bot.SendTextMessageAsync(message.Chat.Id, "ты уже в базе!");
+                await Program.Bot.SendTextMessageAsync(message.Chat.Id, 
+                    "Ты уже существуешь!\n" +
+                    "Используй /reset для того, чтобы пересоздать аккаунт.");
+
+                //await Program.Bot.SendTextMessageAsync(message.Chat.Id, 
+                //    "Но мы, кажется, остановились на том, что...");
+
+                //foundUser.HandleAction(null);
+
                 return;
             }
-
-            // Create user
+            
             currentUser = new User(message.From.Id, message.From.Username);
             this.DbContext.Users.Add(currentUser);
             this.DbContext.SaveChanges();
-
-            // var user = this.DbContext.Users.SingleOrDefault(u => u.Id == message.From.Id);
+            
             await currentUser.HandleAction(messageArgs);
         }
     }

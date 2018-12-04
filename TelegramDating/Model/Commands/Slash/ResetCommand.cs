@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-using TelegramDating.Model.Commands.ChatActions;
+using TelegramDating.Model.Enums;
 
 namespace TelegramDating.Model.Commands.Slash
 {
@@ -11,19 +10,19 @@ namespace TelegramDating.Model.Commands.Slash
 
         public override async Task Execute(User currentUser, EventArgs msgOrCallback)
         {
-            currentUser = null;
-
             var message = msgOrCallback.ToMessage();
-            
-            currentUser = new User(message.From.Id, message.From.Username);
-            this.DbContext.Users.Add(currentUser);
 
-            var user = this.DbContext.Users.SingleOrDefault(u => u.Id == message.From.Id);
+            await Program.Bot.SendTextMessageAsync(message.From.Id, "Сбрасываем твой аккаунт...");
 
-            user.ChatActionId = new ActionHello().Id;
+            this.DbContext.Users.Remove(currentUser);
+
+            var createdUser = new User(message.From.Id, message.From.Username);
+            this.DbContext.Users.Add(createdUser);
+
+            createdUser.ChatActionId = (int)ChatActionEnum.ActionHello;
             this.DbContext.SaveChanges();
 
-            await user.HandleAction(msgOrCallback);
+            await createdUser.HandleAction(msgOrCallback);
         }
     }
 }

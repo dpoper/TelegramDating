@@ -11,8 +11,7 @@ namespace TelegramDating.Model.Commands.ChatActions
         public override int Id => 6;
 
         public override Type NextAction => typeof(ActionSearchSex);
-
-        /// <inheritdoc />
+        
         protected override async Task HandleResponse(User currentUser, EventArgs messageArgs)
         {
             var message = messageArgs.ToMessage();
@@ -30,7 +29,6 @@ namespace TelegramDating.Model.Commands.ChatActions
             await Program.Bot.SendTextMessageAsync(message.Chat.Id, "Это ты? Красивый...");
         }
 
-        /// <inheritdoc />
         protected override async Task HandleAfter(User currentUser, EventArgs messageArgs)
         {
             var sexKeyboard = new InlineKeyboardMarkup(new[]

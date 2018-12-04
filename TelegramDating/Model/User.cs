@@ -66,7 +66,7 @@ namespace TelegramDating.Model
         public int ChatActionId { get; set; } = 0;
 
         /// <summary>
-        /// Constructor for LINQ mapping.
+        /// Constructor for DB mapping.
         /// </summary>
         public User() { }
 

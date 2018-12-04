@@ -8,11 +8,10 @@ namespace TelegramDating.Model.Commands.ChatActions
         public override int Id => 2;
 
         public override Type NextAction => typeof(ActionAge);
-
-        /// <inheritdoc />
+        
         protected override async Task HandleResponse(User currentUser, EventArgs messageArgs)
         {
-            currentUser.Name = messageArgs.ToMessage()?.Text;
+            currentUser.Name = messageArgs.ToMessage().Text;
         }
 
         /// <inheritdoc />
