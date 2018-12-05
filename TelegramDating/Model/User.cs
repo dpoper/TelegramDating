@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Threading.Tasks;
+using Telegram.Bot.Types.ReplyMarkups;
+using TelegramDating.Global;
 using TelegramDating.Model.Enums;
 
 namespace TelegramDating.Model
@@ -21,6 +25,11 @@ namespace TelegramDating.Model
         /// Name that will be displayed to the person who found this user.
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Description that will be displayed to the person who found this user.
+        /// </summary>
+        // public string About { get; set; }
 
         /// <summary>
         /// E.g durov (without '@' symbol at the beginning)
@@ -65,6 +74,20 @@ namespace TelegramDating.Model
         /// </summary>
         public int ChatActionId { get; set; } = 0;
 
+        //private string CheckedUsers { get; set; } = "";
+
+        //public IList<long> CheckedIds
+        //{
+        //    get => this.CheckedUsers.Split(',').Select(long.Parse).ToList() ?? new List<long>();
+        //    private set => this.CheckedUsers = String.Join(",", value);
+        //}
+
+        //private void AddCheckedUser(User user)
+        //{
+        //    this.CheckedIds.Add(user.Id);
+        //    this.CheckedUsers = String.Join(",", this.CheckedIds);
+        //}
+
         /// <summary>
         /// Constructor for DB mapping.
         /// </summary>
@@ -81,7 +104,7 @@ namespace TelegramDating.Model
 
         public async Task HandleAction(EventArgs msgOrCallback)
         {
-            await BotWorker.FindAction(ChatActionId).Execute(this, msgOrCallback);
+            await BotWorker.FindAction(this.ChatActionId).Execute(this, msgOrCallback);
         }
     }
 }

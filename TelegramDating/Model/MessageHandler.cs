@@ -24,9 +24,9 @@ namespace TelegramDating
         {
             var message = messageEventArgs.Message;
 
-            Console.WriteLine(message.MessageId);
+            Console.WriteLine($"Message: {message.MessageId} | {message.Text}");
 
-            User currentUser = DbContext.Users.SingleOrDefault(u => u.Id == messageEventArgs.Message.Chat.Id);
+            var currentUser = DbContext.Users.SingleOrDefault(u => u.UserId == messageEventArgs.Message.Chat.Id);
 
             if (currentUser == null)
                 await BotWorker.FindSlashCommand("/start").Execute(null, messageEventArgs);
@@ -45,32 +45,38 @@ namespace TelegramDating
 
             if (command == null)
             {
-                await new NoCommand().Execute(new User(), messageEventArgs);
+                await new NoCommand().Execute(null, messageEventArgs);
+                Console.WriteLine($"Command: {message.Text} | {message.Chat.Username} | Нет");
                 return;
             }
 
-            await command.Execute(new User(), messageEventArgs);
-            Console.WriteLine($"Команда: {message.Text} | {message.Chat.Username}");
+            var currentUser = DbContext.Users.SingleOrDefault(u => u.UserId == messageEventArgs.Message.Chat.Id);
+            await command.Execute(currentUser, messageEventArgs);
+            Console.WriteLine($"Command: {message.Text} | {message.Chat.Username}");
         }
 
         private static async Task HandleMessageText(MessageEventArgs messageEventArgs)
         {
-            User currentUser = DbContext.Users.SingleOrDefault(u => u.Id == messageEventArgs.Message.Chat.Id);
+            var currentUser = DbContext.Users.SingleOrDefault(u => u.UserId == messageEventArgs.Message.Chat.Id);
             await currentUser?.HandleAction(messageEventArgs);
         }
 
         public static async void HandleCallbackQuery(object sender, CallbackQueryEventArgs queryEventArgs)
         {
             var callback = queryEventArgs.CallbackQuery;
-            User currentUser = DbContext.Users.SingleOrDefault(u => u.UserId == callback.From.Id);
+            var currentUser = DbContext.Users.SingleOrDefault(u => u.UserId == callback.From.Id);
 
-            if (currentUser == null || !((ChatActionEnum)currentUser.ChatActionId).IsCallbackQueryAction() )
+            if (currentUser == null)
                 return;
 
-            var currentAction = BotWorker.FindAction(currentUser.ChatActionId);
-
-            if (!(currentAction is IGotCallbackQuery))
+            var actionEnum = ChatActionExt.GetEnumFromId(currentUser.ChatActionId);
+            bool isCallback = actionEnum.IsCallbackQueryAction();
+            if (!isCallback)
+            {
+                Console.WriteLine($"User @{currentUser.Username} | Wrong callback call" +
+                                  $" | Action: {actionEnum.ToString()}");
                 return;
+            }
 
             await currentUser.HandleAction(queryEventArgs);
         }

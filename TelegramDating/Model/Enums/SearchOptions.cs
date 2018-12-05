@@ -4,9 +4,9 @@
     {
         public enum Sex
         {
-            Any = 0,
+            Any = -1,
             Male = 1,
-            Female = -1
+            Female = 0
         }
     }
 }

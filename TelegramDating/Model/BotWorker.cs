@@ -28,7 +28,8 @@ namespace TelegramDating.Model
 
             _slashCommandList = new List<SlashCommand> {
                 new StartCommand(),
-                new ResetCommand()
+                new ResetCommand(),
+                new MyProfileCommand(),
             };
             
             _availableActions = new ChatAction[]

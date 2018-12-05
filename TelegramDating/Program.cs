@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Linq;
-using Castle.Windsor.Installer;
 using Telegram.Bot;
 using TelegramDating.Database;
 using TelegramDating.Model;
-using TelegramDating.Model.Enums;
 
 namespace TelegramDating
 {
@@ -26,7 +23,8 @@ namespace TelegramDating
 
             Console.WriteLine($"Listening: {me.FirstName}\n");
 
-            Console.ReadKey();
+            while (true)
+                Console.ReadKey();
         }
 
     }

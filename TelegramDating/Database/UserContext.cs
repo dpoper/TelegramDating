@@ -7,6 +7,9 @@ namespace TelegramDating.Database
     {
         public DbSet<User> Users { get; set; }
 
-        public UserContext() : base("DBConnection") { }
+        public UserContext() : base("TelegramDating")
+        {
+            this.Database.CreateIfNotExists();
+        }
     }
 }
