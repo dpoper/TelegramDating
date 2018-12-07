@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
+using TelegramDating.Model.Enums;
 
 namespace TelegramDating.Model.Commands.ChatActions
 {
     internal class ActionSex : ChatAction, IGotCallbackQuery
     {
-        public override int Id => 1;
+        public override int Id => (int) ChatActionEnum.ActionSex;
 
         public override Type NextAction => typeof(ActionName);
         

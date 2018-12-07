@@ -3,12 +3,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
+using TelegramDating.Model.Enums;
 
 namespace TelegramDating.Model.Commands.ChatActions
 {
     internal class ActionPicture : ChatAction
     {
-        public override int Id => 6;
+        public override int Id => (int) ChatActionEnum.ActionPicture;
 
         public override Type NextAction => typeof(ActionSearchSex);
         
@@ -33,9 +34,9 @@ namespace TelegramDating.Model.Commands.ChatActions
         {
             var sexKeyboard = new InlineKeyboardMarkup(new[]
             {
-                InlineKeyboardButton.WithCallbackData("Мальчика"),
-                InlineKeyboardButton.WithCallbackData("Девочку"),
-                InlineKeyboardButton.WithCallbackData("Без разницы")
+                InlineKeyboardButton.WithCallbackData("Мальчика", "m"),
+                InlineKeyboardButton.WithCallbackData("Девочку", "f"),
+                InlineKeyboardButton.WithCallbackData("Без разницы", "a")
             });
 
             await Program.Bot.SendTextMessageAsync(

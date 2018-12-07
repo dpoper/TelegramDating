@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
+using TelegramDating.Model.Enums;
 
 namespace TelegramDating.Model.Commands.ChatActions
 {
     internal class ActionName : ChatAction
     {
-        public override int Id => 2;
+        public override int Id => (int) ChatActionEnum.ActionName;
 
         public override Type NextAction => typeof(ActionAge);
         

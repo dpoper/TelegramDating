@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Telegram.Bot.Types.ReplyMarkups;
+using TelegramDating.Model.Enums;
 
 namespace TelegramDating.Model.Commands.ChatActions
 {
     internal class ActionHello : ChatAction
     {
-        public override int Id => 0;
+        public override int Id => (int) ChatActionEnum.ActionHello;
 
         public override Type NextAction => typeof(ActionSex);
 

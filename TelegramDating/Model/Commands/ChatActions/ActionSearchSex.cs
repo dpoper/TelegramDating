@@ -6,7 +6,7 @@ namespace TelegramDating.Model.Commands.ChatActions
 {
     internal class ActionSearchSex : ChatAction, IGotCallbackQuery
     {
-        public override int Id => 7;
+        public override int Id => (int) ChatActionEnum.ActionSearchSex;
         
         public override Type NextAction => typeof(ActionSearchShow);
 
@@ -23,7 +23,7 @@ namespace TelegramDating.Model.Commands.ChatActions
                 case "f":
                     currentUser.SearchSex = SearchOptions.Sex.Female;
                     break;
-                default:
+                case "a":
                     currentUser.SearchSex = SearchOptions.Sex.Any;
                     break;
             }
