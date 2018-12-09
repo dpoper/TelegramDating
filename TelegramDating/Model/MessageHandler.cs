@@ -14,9 +14,19 @@ namespace TelegramDating
     {
         private static UserContext UserContext { get; set; } = Container.Current.Resolve<UserContext>();
 
-        internal static void HandleMessage(object sender, MessageEventArgs messageEventArgs)
+        internal static async void HandleMessage(object sender, MessageEventArgs messageEventArgs)
         {
             var message = messageEventArgs.ToMessage();
+
+            if (!(message.Type == MessageType.Text || message.Type == MessageType.Photo))
+            {
+                Console.WriteLine($"Message: {message.MessageId} | {message.From.Username} | Wrong message");
+                await Program.Bot.SendTextMessageAsync(
+                    message.From.Id,
+                    "Ты отправил что-то плохое, не то."
+                );
+                return;
+            }
 
             Console.WriteLine($"Message: {message.MessageId} | {message.From.Username} | {message.Text}");
 

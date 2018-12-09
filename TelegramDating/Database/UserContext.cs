@@ -14,5 +14,10 @@ namespace TelegramDating.Database
         }
 
         public User GetByUserId(long userId) => this.Users.SingleOrDefault(u => u.UserId == userId);
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Like>().HasRequired(x => x.User).WithMany(x => x.Likes);
+        }
     }
 }

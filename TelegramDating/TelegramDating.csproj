@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Commands\AskActions\AskAbout.cs" />
+    <Compile Include="Model\Like.cs" />
     <Compile Include="ProfileCreatingExt.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="Database\UserContext.cs" />

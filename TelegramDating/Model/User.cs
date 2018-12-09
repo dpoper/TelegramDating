@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TelegramDating.Database;
 using TelegramDating.Model.Enums;
 
 namespace TelegramDating.Model
@@ -71,15 +71,7 @@ namespace TelegramDating.Model
         /// </summary>
         public ProfileCreatingEnum? ProfileCreatingState { get; set; } = (ProfileCreatingEnum?) BotWorker.FindAskAction(0).Id;
 
-        //private string CheckedUsers { get; set; } = "";
-
-        //public IList<User> CheckedIds { get; set; }
-
-        //private void AddCheckedUser(User user)
-        //{
-        //    this.CheckedIds.Add(user.Id);
-        //    this.CheckedUsers = String.Join(",", this.CheckedIds);
-        //}
+        public ICollection<Like> Likes { get; set; } = new Collection<Like>();
 
         /// <summary>
         /// Constructor for DB mapping.
