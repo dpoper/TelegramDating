@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Linq;
 using TelegramDating.Model;
 
 namespace TelegramDating.Database
@@ -9,7 +10,9 @@ namespace TelegramDating.Database
 
         public UserContext() : base("TelegramDating")
         {
-            this.Database.CreateIfNotExists();
+            System.Data.Entity.Database.SetInitializer(new MigrateDatabaseToLatestVersion<UserContext, Migrations.Configuration>());
         }
+
+        public User GetByUserId(long userId) => this.Users.SingleOrDefault(u => u.UserId == userId);
     }
 }

@@ -82,37 +82,37 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChatActionExt.cs" />
+    <Compile Include="Model\Commands\AskActions\AskAbout.cs" />
+    <Compile Include="ProfileCreatingExt.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="Database\UserContext.cs" />
     <Compile Include="Database\Installer.cs" />
     <Compile Include="Global\EmojiConsts.cs" />
     <Compile Include="Global\MessageFormatter.cs" />
+    <Compile Include="Database\Migrations\Configuration.cs" />
     <Compile Include="Model\BotWorker.cs" />
+    <Compile Include="Model\Commands\AskActions\AskAction.cs" />
+    <Compile Include="Model\Commands\AskActions\AskAge.cs" />
+    <Compile Include="Model\Commands\AskActions\AskCity.cs" />
+    <Compile Include="Model\Commands\AskActions\AskCountry.cs" />
+    <Compile Include="Model\Commands\AskActions\AskName.cs" />
+    <Compile Include="Model\Commands\AskActions\AskPicture.cs" />
+    <Compile Include="Model\Commands\AskActions\AskSearchSex.cs" />
+    <Compile Include="Model\Commands\AskActions\AskSex.cs" />
     <Compile Include="Model\Commands\Command.cs" />
     <Compile Include="Model\Commands\Slash\MyProfileCommand.cs" />
     <Compile Include="Model\Commands\Slash\NoCommand.cs" />
     <Compile Include="Model\Commands\Slash\ResetCommand.cs" />
     <Compile Include="Model\Commands\Slash\SlashCommand.cs" />
     <Compile Include="Model\Commands\Slash\StartCommand.cs" />
-    <Compile Include="Model\Enums\ChatActionEnum.cs" />
+    <Compile Include="Model\Enums\ProfileCreatingEnum.cs" />
     <Compile Include="Model\Enums\SearchOptions.cs" />
     <Compile Include="Model\MessageHandler.cs" />
-    <Compile Include="Model\Commands\ChatActions\IGotCallbackQuery.cs" />
-    <Compile Include="Model\Commands\ChatActions\ActionAge.cs" />
-    <Compile Include="Model\Commands\ChatActions\ActionCity.cs" />
-    <Compile Include="Model\Commands\ChatActions\ActionCountry.cs" />
-    <Compile Include="Model\Commands\ChatActions\ActionName.cs" />
-    <Compile Include="Model\Commands\ChatActions\ActionPicture.cs" />
-    <Compile Include="Model\Commands\ChatActions\ActionSearchSex.cs" />
-    <Compile Include="Model\Commands\ChatActions\ActionSearchShow.cs" />
-    <Compile Include="Model\Commands\ChatActions\ActionSex.cs" />
-    <Compile Include="Model\Commands\ChatActions\ActionHello.cs" />
-    <Compile Include="Model\Commands\ChatActions\ChatAction.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="TelegramUpdateEventArgsExt.cs" />
+    <Compile Include="UserExt.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -134,6 +134,5 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

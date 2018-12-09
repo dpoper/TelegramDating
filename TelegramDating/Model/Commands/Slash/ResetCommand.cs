@@ -1,28 +1,21 @@
-﻿using System;
-using System.Threading.Tasks;
-using TelegramDating.Model.Enums;
-
+﻿
 namespace TelegramDating.Model.Commands.Slash
 {
     class ResetCommand : SlashCommand
     {
         public override string SlashText => "/reset";
 
-        public override async Task Execute(User currentUser, EventArgs msgOrCallback)
+        public override async void Execute(User currentUser, string @params = "")
         {
-            var message = msgOrCallback.ToMessage();
+            await Program.Bot.SendTextMessageAsync(currentUser.UserId, "Сбрасываем твой аккаунт...");
 
-            await Program.Bot.SendTextMessageAsync(message.From.Id, "Сбрасываем твой аккаунт...");
+            this.UserContext.Users.Remove(currentUser);
 
-            this.DbContext.Users.Remove(currentUser);
+            User createdUser = new User(currentUser.UserId, currentUser.Username);
+            this.UserContext.Users.Add(createdUser);
+            this.UserContext.SaveChanges();
 
-            var createdUser = new User(message.From.Id, message.From.Username);
-            this.DbContext.Users.Add(createdUser);
-
-            createdUser.ChatActionId = (int)ChatActionEnum.ActionHello;
-            this.DbContext.SaveChanges();
-
-            await createdUser.HandleAction(msgOrCallback);
+            BotWorker.FindAskAction(0).Ask(currentUser);
         }
     }
 }

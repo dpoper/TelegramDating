@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
-using Telegram.Bot.Types.ReplyMarkups;
-using TelegramDating.Global;
+using TelegramDating.Database;
 using TelegramDating.Model.Enums;
 
 namespace TelegramDating.Model
@@ -29,7 +25,7 @@ namespace TelegramDating.Model
         /// <summary>
         /// Description that will be displayed to the person who found this user.
         /// </summary>
-        // public string About { get; set; }
+        public string About { get; set; }
 
         /// <summary>
         /// E.g durov (without '@' symbol at the beginning)
@@ -70,9 +66,9 @@ namespace TelegramDating.Model
         public SearchOptions.Sex SearchSex { get; set; }
 
         /// <summary>
-        /// Current user's state id.
+        /// Current user's profile state id.
         /// </summary>
-        public int ChatActionId { get; set; } = 0;
+        public ProfileCreatingEnum? ProfileCreatingState { get; set; } = (ProfileCreatingEnum?) BotWorker.FindAskAction(0).Id;
 
         //private string CheckedUsers { get; set; } = "";
 
@@ -96,15 +92,42 @@ namespace TelegramDating.Model
         /// <summary>
         /// Constructor for adding users into database.
         /// </summary>
-        public User(long userId, string username)
+        public User(long userId, string username = "")
         {
             this.UserId = userId;
             this.Username = username;
         }
 
-        public async Task HandleAction(EventArgs msgOrCallback)
+        public void SetInfo(object infoObj)
         {
-            await BotWorker.FindAction(this.ChatActionId).Execute(this, msgOrCallback);
+            if (!this.ProfileCreatingState.HasValue)
+                return;
+
+            string info = infoObj.ToString();
+
+            switch (this.ProfileCreatingState)
+            {
+                case ProfileCreatingEnum.Sex:       this.Sex = (SearchOptions.Sex) int.Parse(info) == SearchOptions.Sex.Male;
+                    break;
+                case ProfileCreatingEnum.Name:      this.Name = info;
+                    break;
+                case ProfileCreatingEnum.About:     this.About = info;
+                    break;
+                case ProfileCreatingEnum.Age:       this.Age = int.Parse(info);
+                    break;
+                case ProfileCreatingEnum.Country:   this.Country = info;
+                    break;
+                case ProfileCreatingEnum.City:      this.City = info;
+                    break;
+                case ProfileCreatingEnum.Picture:   this.PictureId = info;
+                    break;
+                case ProfileCreatingEnum.SearchSex: this.SearchSex = (SearchOptions.Sex) Enum.Parse(typeof(SearchOptions.Sex), info);
+                break;
+
+                default:
+                    throw new ArgumentException($"Ой! Разработчик, кажется, забыл реализовать что-то.\n" +
+                                                $"ProfileCreatingState: {this.ProfileCreatingState}");
+            }
         }
     }
 }

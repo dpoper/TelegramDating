@@ -6,7 +6,7 @@ namespace TelegramDating
 {
     public static class TelegramUpdateEventArgsExt
     {
-        public static CallbackQuery ToCallback(this EventArgs callbackArgs)
+        public static CallbackQuery ToCallbackQuery(this EventArgs callbackArgs)
         {
             return (callbackArgs as CallbackQueryEventArgs)?.CallbackQuery;
         }

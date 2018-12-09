@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types.Enums;
 using TelegramDating.Database;
 using TelegramDating.Model;
-using TelegramDating.Model.Commands.ChatActions;
+using TelegramDating.Model.Commands.AskActions;
 using TelegramDating.Model.Commands.Slash;
 using TelegramDating.Model.Enums;
 
@@ -13,72 +12,102 @@ namespace TelegramDating
 {
     public static class MessageHandler
     {
-        public static UserContext DbContext { get; set; } = Container.Current.Resolve<UserContext>();
+        private static UserContext UserContext { get; set; } = Container.Current.Resolve<UserContext>();
 
-        /// <summary>
-        /// Master method for message handling.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="messageEventArgs"></param>
-        public static async void HandleMessage(object sender, MessageEventArgs messageEventArgs)
+        internal static void HandleMessage(object sender, MessageEventArgs messageEventArgs)
         {
-            var message = messageEventArgs.Message;
+            var message = messageEventArgs.ToMessage();
 
-            Console.WriteLine($"Message: {message.MessageId} | {message.Text}");
+            Console.WriteLine($"Message: {message.MessageId} | {message.From.Username} | {message.Text}");
 
-            var currentUser = DbContext.Users.SingleOrDefault(u => u.UserId == messageEventArgs.Message.Chat.Id);
+            User currentUser = UserContext.GetByUserId(message.Chat.Id);
 
             if (currentUser == null)
-                await BotWorker.FindSlashCommand("/start").Execute(null, messageEventArgs);
+            {
+                currentUser = new User(message.From.Id, message.From.Username);
+                BotWorker.FindSlashCommand("/start").Execute(currentUser);
+                return;
+            }
 
             if (message.Type == MessageType.Text && message.Text[0] == '/')
-                await ExecuteCommand(messageEventArgs);
-            else
-                await HandleMessageText(messageEventArgs);
-        }
-
-        private static async Task ExecuteCommand(MessageEventArgs messageEventArgs)
-        {
-            var message = messageEventArgs.Message;
-
-            var command = BotWorker.FindSlashCommand(message.Text);
-
-            if (command == null)
             {
-                await new NoCommand().Execute(null, messageEventArgs);
-                Console.WriteLine($"Command: {message.Text} | {message.Chat.Username} | Нет");
+                var command = BotWorker.FindSlashCommand(message.Text);
+
+                if (command == null)
+                {
+                    new NoCommand().Execute(currentUser);
+                    Console.WriteLine($"Command: {message.Text} | {message.Chat.Username} | Нет");
+                    return;
+                }
+
+                command.Execute(currentUser, message.Text);
+                Console.WriteLine($"Command: {message.Text} | {message.Chat.Username}");
+
                 return;
             }
 
-            var currentUser = DbContext.Users.SingleOrDefault(u => u.UserId == messageEventArgs.Message.Chat.Id);
-            await command.Execute(currentUser, messageEventArgs);
-            Console.WriteLine($"Command: {message.Text} | {message.Chat.Username}");
+            if (currentUser.IsCreatingProfile()) // needs null/empty checks
+            {
+                AskAction currentAsk = BotWorker.FindAskAction(currentUser.ProfileCreatingState.Value);
+
+                if (currentUser.ProfileCreatingState == ProfileCreatingEnum.Picture)
+                    currentUser.SetInfo(message.Photo.Last().FileId);
+                else
+                    currentUser.SetInfo(message.Text);
+
+                currentAsk.After(currentUser);
+
+                AskAction nextAsk = BotWorker.GetNextAskAction(currentUser.ProfileCreatingState.Value);
+
+                if (nextAsk != null)
+                {
+                    currentUser.ProfileCreatingState = (ProfileCreatingEnum?) nextAsk.Id;
+                    nextAsk.Ask(currentUser);
+                }
+                else
+                {
+                    currentUser.ProfileCreatingState = null;
+                }
+
+                UserContext.SaveChanges();
+            }
         }
 
-        private static async Task HandleMessageText(MessageEventArgs messageEventArgs)
-        {
-            var currentUser = DbContext.Users.SingleOrDefault(u => u.UserId == messageEventArgs.Message.Chat.Id);
-            await currentUser?.HandleAction(messageEventArgs);
-        }
 
-        public static async void HandleCallbackQuery(object sender, CallbackQueryEventArgs queryEventArgs)
+        internal static void HandleCallbackQuery(object sender, CallbackQueryEventArgs callbackArgs)
         {
-            var callback = queryEventArgs.CallbackQuery;
-            var currentUser = DbContext.Users.SingleOrDefault(u => u.UserId == callback.From.Id);
+            var callback = callbackArgs.ToCallbackQuery();
+
+            Console.WriteLine($"Callback: {callback.Id} | {callback.From.Username} | {callback.Data}");
+
+            User currentUser = UserContext.GetByUserId(callback.From.Id);
 
             if (currentUser == null)
-                return;
-
-            var actionEnum = ChatActionExt.GetEnumFromId(currentUser.ChatActionId);
-            bool isCallback = actionEnum.IsCallbackQueryAction();
-            if (!isCallback)
             {
-                Console.WriteLine($"User @{currentUser.Username} | Wrong callback call" +
-                                  $" | Action: {actionEnum.ToString()}");
+                currentUser = new User(callback.From.Id, callback.From.Username);
+                BotWorker.FindSlashCommand("/start").Execute(currentUser);
                 return;
             }
 
-            await currentUser.HandleAction(queryEventArgs);
+            if (currentUser.IsCreatingProfile()) // needs null/empty checks
+            {
+                AskAction currentAsk = BotWorker.FindAskAction(currentUser.ProfileCreatingState.Value);
+                currentUser.SetInfo(callback.Data);
+                currentAsk.After(currentUser);
+
+                AskAction nextAsk = BotWorker.GetNextAskAction(currentUser.ProfileCreatingState.Value);
+
+                if (nextAsk == null)
+                {
+                    Console.WriteLine("Search!!!!!!!!!!!!!!!!!!!");
+                    return;
+                }
+
+                currentUser.ProfileCreatingState = (ProfileCreatingEnum?)nextAsk.Id;
+                nextAsk.Ask(currentUser);
+
+                return;
+            }
         }
     }
 

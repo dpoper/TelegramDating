@@ -1,13 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using TelegramDating.Database;
 
 namespace TelegramDating.Model.Commands
 {
     public abstract class Command
     {
-        public UserContext DbContext { get; } = Container.Current.Resolve<UserContext>();
+        public UserContext UserContext { get; } = Container.Current.Resolve<UserContext>();
 
-        public abstract Task Execute(User currentUser, EventArgs msgOrCallback);
+        public abstract void Execute(User currentUser, string @params = "");
     }
 }

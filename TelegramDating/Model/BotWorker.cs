@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using Telegram.Bot;
-using TelegramDating.Model.Commands.ChatActions;
+using TelegramDating.Model.Commands.AskActions;
 using TelegramDating.Model.Commands.Slash;
+using TelegramDating.Model.Enums;
 
 namespace TelegramDating.Model
 {
@@ -11,9 +13,24 @@ namespace TelegramDating.Model
         const string FileUrl = "https://api.telegram.org/file/bot{0}/{1}";
 
         private static TelegramBotClient _client;
-        private static IEnumerable<SlashCommand> _slashCommandList;
+        private static IReadOnlyList<SlashCommand> _slashCommandList = new SlashCommand[] {
+                                                                            new StartCommand(),
+                                                                            new ResetCommand(),
+                                                                            new MyProfileCommand(),
+                                                                      };
 
-        private static ChatAction[] _availableActions;
+        private static IList<AskAction> _profileCreatingAskActions =
+            new List<AskAction>
+            {
+                new AskName(),
+                new AskSex(),
+                new AskAge(),
+                new AskCity(),
+                new AskCountry(),
+                new AskAbout(),
+                new AskPicture(),
+                new AskSearchSex(),
+            };
 
         /// <summary>
         /// Create instance of bot.
@@ -26,43 +43,44 @@ namespace TelegramDating.Model
 
             _client = new TelegramBotClient(token);
 
-            _slashCommandList = new List<SlashCommand> {
-                new StartCommand(),
-                new ResetCommand(),
-                new MyProfileCommand(),
-            };
-            
-            _availableActions = new ChatAction[]
-            {
-                new ActionHello(),
-                new ActionSex(),
-                new ActionName(),
-                new ActionAge(),
-                new ActionCountry(),
-                new ActionCity(),
-                new ActionPicture(),
-                new ActionSearchSex(),
-                new ActionSearchShow()
-            };
-
             _client.StartReceiving();
-            _client.OnMessage += MessageHandler.HandleMessage;
+            _client.OnMessage       += MessageHandler.HandleMessage;
             _client.OnCallbackQuery += MessageHandler.HandleCallbackQuery;
-
+            
             return _client;
 
         }
 
-        public static ChatAction FindAction(int actionId)
+        public static AskAction FindAskAction(ProfileCreatingEnum pce)
         {
-            return _availableActions.SingleOrDefault(act => act.Id == actionId);
+            return _profileCreatingAskActions.FirstOrDefault(aa => aa.Id == (int)pce);
+        }
 
+        public static int GetAskActionIndex(ProfileCreatingEnum pce)
+        {
+            return _profileCreatingAskActions.IndexOf(pce);
+        }
+
+        public static AskAction GetNextAskAction(ProfileCreatingEnum pce)
+        {
+            try
+            {
+                return _profileCreatingAskActions.ElementAt(GetAskActionIndex(pce) + 1);
+            }
+            catch (System.ArgumentOutOfRangeException)
+            {
+                return null;
+            }
+        }
+
+        public static AskAction FindAskAction(int index)
+        {
+            return _profileCreatingAskActions.ElementAt(index);
         }
 
         public static SlashCommand FindSlashCommand(string messageText)
         {
             return _slashCommandList.SingleOrDefault(cmd => messageText == cmd.SlashText);
         }
-
     }
 }

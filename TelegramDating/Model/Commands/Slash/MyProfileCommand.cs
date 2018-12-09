@@ -10,12 +10,10 @@ namespace TelegramDating.Model.Commands.Slash
     {
         public override string SlashText => "/myprofile";
 
-        public override async Task Execute(User currentUser, EventArgs msgOrCallback)
+        public override async void Execute(User currentUser, string @params = "")
         {
-            var message = msgOrCallback.ToMessage();
-
             await Program.Bot.SendPhotoAsync(
-                chatId: message.From.Id,
+                chatId: currentUser.UserId,
                 photo: currentUser.PictureId,
                 caption: MessageFormatter.FormatProfileMessage(currentUser), 
                 parseMode: ParseMode.Html);
