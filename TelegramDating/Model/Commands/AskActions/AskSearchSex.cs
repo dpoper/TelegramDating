@@ -1,4 +1,5 @@
-﻿using Telegram.Bot.Types.ReplyMarkups;
+﻿using Telegram.Bot.Types;
+using Telegram.Bot.Types.ReplyMarkups;
 using TelegramDating.Model.Enums;
 
 namespace TelegramDating.Model.Commands.AskActions
@@ -24,6 +25,11 @@ namespace TelegramDating.Model.Commands.AskActions
                 "Так, а кого искать тебе будем?",
                 replyMarkup: sexKeyboard
             );
+        }
+
+        public override async void After(User currentUser, CallbackQuery cquery, Message message = null)
+        {
+            await Program.Bot.EditMessageReplyMarkupAsync(cquery.Message.Chat.Id, cquery.Message.MessageId, replyMarkup: null);
         }
     }
 }

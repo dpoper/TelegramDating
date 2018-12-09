@@ -55,7 +55,7 @@ namespace TelegramDating
                 else
                     currentUser.SetInfo(message.Text);
 
-                currentAsk.After(currentUser);
+                currentAsk.After(currentUser, message: message);
 
                 AskAction nextAsk = BotWorker.GetNextAskAction(currentUser.ProfileCreatingState.Value);
 
@@ -93,7 +93,7 @@ namespace TelegramDating
             {
                 AskAction currentAsk = BotWorker.FindAskAction(currentUser.ProfileCreatingState.Value);
                 currentUser.SetInfo(callback.Data);
-                currentAsk.After(currentUser);
+                currentAsk.After(currentUser, cquery: callback);
 
                 AskAction nextAsk = BotWorker.GetNextAskAction(currentUser.ProfileCreatingState.Value);
 

@@ -1,4 +1,5 @@
-﻿
+﻿using Telegram.Bot.Types;
+
 namespace TelegramDating.Model.Commands.AskActions
 {
     public abstract class AskAction
@@ -7,6 +8,6 @@ namespace TelegramDating.Model.Commands.AskActions
 
         public abstract void Ask(User currentUser);
 
-        public virtual void After(User currentUser) { }
+        public virtual void After(User currentUser, CallbackQuery cquery = null, Message message = null) { }
     }
 }

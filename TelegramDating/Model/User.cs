@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TelegramDating.Database;
@@ -72,11 +73,7 @@ namespace TelegramDating.Model
 
         //private string CheckedUsers { get; set; } = "";
 
-        //public IList<long> CheckedIds
-        //{
-        //    get => this.CheckedUsers.Split(',').Select(long.Parse).ToList() ?? new List<long>();
-        //    private set => this.CheckedUsers = String.Join(",", value);
-        //}
+        //public IList<User> CheckedIds { get; set; }
 
         //private void AddCheckedUser(User user)
         //{
