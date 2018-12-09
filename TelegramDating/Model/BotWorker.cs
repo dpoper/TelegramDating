@@ -63,14 +63,12 @@ namespace TelegramDating.Model
 
         public static AskAction GetNextAskAction(ProfileCreatingEnum pce)
         {
-            try
-            {
-                return _profileCreatingAskActions.ElementAt(GetAskActionIndex(pce) + 1);
-            }
-            catch (System.ArgumentOutOfRangeException)
-            {
+            int nextIndex = GetAskActionIndex(pce) + 1;
+
+            if (nextIndex < _profileCreatingAskActions.Count)
+                return _profileCreatingAskActions.ElementAt(nextIndex);
+            else
                 return null;
-            }
         }
 
         public static AskAction FindAskAction(int index)

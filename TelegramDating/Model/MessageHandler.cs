@@ -107,16 +107,18 @@ namespace TelegramDating
 
                 AskAction nextAsk = BotWorker.GetNextAskAction(currentUser.ProfileCreatingState.Value);
 
-                if (nextAsk == null)
+                if (nextAsk != null)
                 {
-                    Console.WriteLine("Search!!!!!!!!!!!!!!!!!!!");
-                    return;
+                    currentUser.ProfileCreatingState = (ProfileCreatingEnum?) nextAsk.Id;
+                    nextAsk.Ask(currentUser);
+                }
+                else
+                {
+                    Console.WriteLine("Search!!!");
+                    currentUser.ProfileCreatingState = null;
                 }
 
-                currentUser.ProfileCreatingState = (ProfileCreatingEnum?)nextAsk.Id;
-                nextAsk.Ask(currentUser);
-
-                return;
+                UserContext.SaveChanges();
             }
         }
     }
