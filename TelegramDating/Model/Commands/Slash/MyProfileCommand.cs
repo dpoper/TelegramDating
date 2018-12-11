@@ -12,6 +12,12 @@ namespace TelegramDating.Model.Commands.Slash
 
         public override async void Execute(User currentUser, string @params = "")
         {
+            if (currentUser.IsCreatingProfile())
+            {
+                await Program.Bot.SendTextMessageAsync(currentUser.UserId, "Сперва заполни анкету полностью!");
+                return;
+            }
+
             await Program.Bot.SendPhotoAsync(
                 chatId: currentUser.UserId,
                 photo: currentUser.PictureId,
