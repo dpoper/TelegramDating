@@ -15,6 +15,12 @@ namespace TelegramDating.Model.Commands.AskActions
                 "Отлично! Последний штрих – твоё фото. Пришли мне изображение или ссылку на картинку.");
         }
 
+        public override async void OnSuccess(User currentUser, CallbackQuery cquery = null, Message message = null)
+        {
+            await Program.Bot.SendTextMessageAsync(currentUser.UserId,
+                "Это ты? Красивый....");
+        }
+
         public override bool Validate(User currentUser, CallbackQuery cquery = null, Message message = null)
         {
             if (cquery != null)

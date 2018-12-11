@@ -100,8 +100,7 @@ namespace TelegramDating
 
                         try
                         {
-                            messageWithPhoto = await Program.Bot.SendPhotoAsync(currentUser.UserId, message.Text, 
-                                caption: "Это твоё фото.");
+                            messageWithPhoto = await Program.Bot.SendPhotoAsync(currentUser.UserId, message.Text);
                         }
                         catch
                         {
