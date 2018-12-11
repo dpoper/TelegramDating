@@ -108,7 +108,9 @@ namespace TelegramDating.Model
                     break;
                 case ProfileCreatingEnum.City:      this.City = info;
                     break;
-                case ProfileCreatingEnum.Picture:   this.PictureId = info;
+                case ProfileCreatingEnum.Picture:
+                    if (infoObj is Telegram.Bot.Types.PhotoSize photo)
+                        this.PictureId = photo.FileId;
                     break;
                 case ProfileCreatingEnum.SearchSex: this.SearchSex = (SearchOptions.Sex) Enum.Parse(typeof(SearchOptions.Sex), info);
                 break;

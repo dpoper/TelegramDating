@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using Telegram.Bot;
@@ -28,8 +29,8 @@ namespace TelegramDating.Model
                 new AskCountry(),
                 new AskCity(),
                 new AskAbout(),
-                new AskPicture(),
                 new AskSearchSex(),
+                new AskPicture(),
             };
 
         /// <summary>
@@ -49,6 +50,17 @@ namespace TelegramDating.Model
             
             return _client;
 
+        }
+
+        public static User StartNewUser(long userId, string username)
+        {
+            if (_client is null)
+                throw new NullReferenceException($"TelegramBotClient is not initialized yet. " +
+                                                 $"Call {typeof(BotWorker).Name}.Get() method first.");
+
+            User currentUser = new User(userId, username);
+            BotWorker.FindSlashCommand("/start").Execute(currentUser);
+            return currentUser;
         }
 
         public static AskAction FindAskAction(ProfileCreatingEnum pce)

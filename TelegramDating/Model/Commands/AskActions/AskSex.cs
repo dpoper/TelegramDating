@@ -23,7 +23,20 @@ namespace TelegramDating.Model.Commands.AskActions
             );
         }
 
-        public override async void After(User currentUser, CallbackQuery cquery, Message message = null)
+        public override bool Validate(User currentUser, CallbackQuery cquery = null, Message message = null)
+        {
+            return message == null
+                   && cquery != null
+                   &&    (cquery.Data == ((int) SearchOptions.Sex.Male).ToString()
+                       || cquery.Data == ((int) SearchOptions.Sex.Female).ToString());
+        }
+
+        public override async void OnValidationFail(User currentUser)
+        {
+            await Program.Bot.SendTextMessageAsync(currentUser.UserId, "Просто нажми чёртову кнопку!");
+        }
+
+        public override async void OnSuccess(User currentUser, CallbackQuery cquery, Message message = null)
         {
             await Program.Bot.EditMessageReplyMarkupAsync(cquery.Message.Chat.Id, cquery.Message.MessageId, replyMarkup: null);
         }

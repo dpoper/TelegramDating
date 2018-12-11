@@ -18,71 +18,28 @@ namespace TelegramDating
         {
             var message = messageEventArgs.ToMessage();
 
-            if (!(message.Type == MessageType.Text || message.Type == MessageType.Photo))
-            {
-                Console.WriteLine($"Message: {message.MessageId} | {message.From.Username} | Wrong message");
-                await Program.Bot.SendTextMessageAsync(
-                    message.From.Id,
-                    "Ты отправил что-то плохое, не то."
-                );
-                return;
-            }
-
             Console.WriteLine($"Message: {message.MessageId} | {message.From.Username} | {message.Text}");
 
             User currentUser = UserContext.GetByUserId(message.Chat.Id);
 
             if (currentUser == null)
             {
-                currentUser = new User(message.From.Id, message.From.Username);
-                BotWorker.FindSlashCommand("/start").Execute(currentUser);
+                BotWorker.StartNewUser(message.From.Id, message.From.Username);
                 return;
             }
 
-            if (message.Type == MessageType.Text && message.Text[0] == '/')
+            if (message.Type == MessageType.Text && message.Text.Length > 0 && message.Text[0] == '/')
             {
-                var command = BotWorker.FindSlashCommand(message.Text);
-
-                if (command == null)
-                {
-                    new NoCommand().Execute(currentUser);
-                    Console.WriteLine($"Command: {message.Text} | {message.Chat.Username} | Нет");
-                    return;
-                }
-
-                command.Execute(currentUser, message.Text);
-                Console.WriteLine($"Command: {message.Text} | {message.Chat.Username}");
-
+                MessageHandler.ExecuteAsCommand(currentUser, message.Text);
                 return;
             }
 
-            if (currentUser.IsCreatingProfile()) // needs null/empty checks
+            if (currentUser.IsCreatingProfile()) 
             {
-                AskAction currentAsk = BotWorker.FindAskAction(currentUser.ProfileCreatingState.Value);
-
-                if (currentUser.ProfileCreatingState == ProfileCreatingEnum.Picture)
-                    currentUser.SetInfo(message.Photo.Last().FileId);
-                else
-                    currentUser.SetInfo(message.Text);
-
-                currentAsk.After(currentUser, message: message);
-
-                AskAction nextAsk = BotWorker.GetNextAskAction(currentUser.ProfileCreatingState.Value);
-
-                if (nextAsk != null)
-                {
-                    currentUser.ProfileCreatingState = (ProfileCreatingEnum?) nextAsk.Id;
-                    nextAsk.Ask(currentUser);
-                }
-                else
-                {
-                    currentUser.ProfileCreatingState = null;
-                }
-
-                UserContext.SaveChanges();
+                MessageHandler.CreatingProfileLoop(currentUser, message: message);
+                return;
             }
         }
-
 
         internal static void HandleCallbackQuery(object sender, CallbackQueryEventArgs callbackArgs)
         {
@@ -94,32 +51,92 @@ namespace TelegramDating
 
             if (currentUser == null)
             {
-                currentUser = new User(callback.From.Id, callback.From.Username);
-                BotWorker.FindSlashCommand("/start").Execute(currentUser);
+                BotWorker.StartNewUser(callback.From.Id, callback.From.Username);
                 return;
             }
 
-            if (currentUser.IsCreatingProfile()) // needs null/empty checks
+            if (currentUser.IsCreatingProfile())
             {
-                AskAction currentAsk = BotWorker.FindAskAction(currentUser.ProfileCreatingState.Value);
-                currentUser.SetInfo(callback.Data);
-                currentAsk.After(currentUser, cquery: callback);
-
-                AskAction nextAsk = BotWorker.GetNextAskAction(currentUser.ProfileCreatingState.Value);
-
-                if (nextAsk != null)
-                {
-                    currentUser.ProfileCreatingState = (ProfileCreatingEnum?) nextAsk.Id;
-                    nextAsk.Ask(currentUser);
-                }
-                else
-                {
-                    Console.WriteLine("Search!!!");
-                    currentUser.ProfileCreatingState = null;
-                }
-
-                UserContext.SaveChanges();
+                MessageHandler.CreatingProfileLoop(currentUser, cquery: callback);
+                return;
             }
+        }
+
+        private static void ExecuteAsCommand(User currentUser, string slashText)
+        {
+            var command = BotWorker.FindSlashCommand(slashText);
+
+            if (command is null)
+            {
+                new NoCommand().Execute(currentUser);
+                Console.WriteLine($"Command: {slashText} | {currentUser.Username} | Нет");
+                return;
+            }
+
+            command.Execute(currentUser, slashText);
+            Console.WriteLine($"Command: {slashText} | {currentUser.Username}");
+        }
+
+        private static async void CreatingProfileLoop(User currentUser, Telegram.Bot.Types.Message message = null, Telegram.Bot.Types.CallbackQuery cquery = null)
+        {
+            AskAction currentAsk = BotWorker.FindAskAction(currentUser.ProfileCreatingState.Value);
+
+            bool isValidated = currentAsk.Validate(currentUser, cquery: cquery, message: message);
+
+            if (!isValidated)
+            {
+                currentAsk.OnValidationFail(currentUser);
+                return;
+            }
+
+            if (cquery != null) currentUser.SetInfo(cquery.Data);
+            else if (message != null)
+            {
+                if (message.Type == MessageType.Text)
+                {
+                    if (currentAsk is AskPicture)
+                    {
+                        Telegram.Bot.Types.Message messageWithPhoto;
+
+                        try
+                        {
+                            messageWithPhoto = await Program.Bot.SendPhotoAsync(currentUser.UserId, message.Text, 
+                                caption: "Это твоё фото.");
+                        }
+                        catch
+                        {
+                            await Program.Bot.SendTextMessageAsync(currentUser.UserId, "Что-то пошло не так. Кажется, ссылка битая.");
+                            return;
+                        }
+
+                        currentUser.SetInfo(messageWithPhoto.Photo.Last());
+                    }
+                    else
+                    { 
+                        currentUser.SetInfo(message.Text);
+                    }
+                }
+                else if (message.Type == MessageType.Photo && currentAsk is AskPicture)
+                {
+                    currentUser.SetInfo(message.Photo.Last());
+                }
+            }
+
+            currentAsk.OnSuccess(currentUser, message: message, cquery: cquery);
+
+            AskAction nextAsk = BotWorker.GetNextAskAction(currentUser.ProfileCreatingState.Value);
+
+            if (nextAsk != null)
+            {
+                currentUser.ProfileCreatingState = (ProfileCreatingEnum?) nextAsk.Id;
+                nextAsk.Ask(currentUser);
+            }
+            else
+            {
+                currentUser.ProfileCreatingState = null;
+            }
+
+            UserContext.SaveChanges();
         }
     }
 
