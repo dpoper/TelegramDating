@@ -8,11 +8,8 @@ namespace TelegramDating.Model.Commands.Slash
         public override async void Execute(User currentUser, string @params = "")
         {
             await Program.Bot.SendTextMessageAsync(currentUser.UserId, "Сбрасываем твой аккаунт...");
-
-            this.UserContext.Users.Remove(currentUser);
-
-            User createdUser = new User(currentUser.UserId, currentUser.Username);
-            this.UserContext.Users.Add(createdUser);
+            
+            currentUser = new User(currentUser.UserId, currentUser.Username);
             this.UserContext.SaveChanges();
 
             BotWorker.FindAskAction(0).Ask(currentUser);

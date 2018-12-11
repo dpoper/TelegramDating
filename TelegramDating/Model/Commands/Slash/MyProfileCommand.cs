@@ -2,7 +2,8 @@
 using System.Threading.Tasks;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InputFiles;
-using TelegramDating.Global;
+using TelegramDating.Extensions;
+using TelegramDating.Shared;
 
 namespace TelegramDating.Model.Commands.Slash
 {

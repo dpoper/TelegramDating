@@ -5,7 +5,7 @@ using System.Reflection;
 using TelegramDating.Model.Commands.AskActions;
 using TelegramDating.Model.Enums;
 
-namespace TelegramDating
+namespace TelegramDating.Extensions
 {
     public static class ProfileCreatingExt
     {

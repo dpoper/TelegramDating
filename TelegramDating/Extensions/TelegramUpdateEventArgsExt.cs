@@ -2,7 +2,7 @@
 using Telegram.Bot.Args;
 using Telegram.Bot.Types;
 
-namespace TelegramDating
+namespace TelegramDating.Extensions
 {
     public static class TelegramUpdateEventArgsExt
     {

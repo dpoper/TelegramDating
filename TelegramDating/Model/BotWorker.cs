@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using Telegram.Bot;
+using Telegram.Bot.Types.Enums;
+using TelegramDating.Database;
+using TelegramDating.Extensions;
 using TelegramDating.Model.Commands.AskActions;
 using TelegramDating.Model.Commands.Slash;
 using TelegramDating.Model.Enums;
@@ -12,6 +15,8 @@ namespace TelegramDating.Model
     public static class BotWorker
     {
         const string FileUrl = "https://api.telegram.org/file/bot{0}/{1}";
+
+        private static UserContext UserContext { get; set; } = Container.Current.Resolve<UserContext>();
 
         private static TelegramBotClient _client;
         private static IReadOnlyList<SlashCommand> _slashCommandList = new SlashCommand[] {
@@ -61,6 +66,54 @@ namespace TelegramDating.Model
             User currentUser = new User(userId, username);
             BotWorker.FindSlashCommand("/start").Execute(currentUser);
             return currentUser;
+        }
+
+        public static async void SendNextProfileForLike(User currentUser)
+        {
+            if (_client is null)
+                throw new NullReferenceException($"TelegramBotClient is not initialized yet. " +
+                                                 $"Call {typeof(BotWorker).Name}.Get() method first.");
+
+            var foundUser = BotWorker.FindSomeoneForUser(currentUser);
+
+            if (foundUser != null)
+            {
+                await _client.SendPhotoAsync(
+                    chatId: currentUser.UserId,
+                    photo: foundUser.PictureId,
+                    caption: MessageFormatter.FormatProfileMessage(foundUser),
+                    parseMode: ParseMode.Html,
+                    replyMarkup: CallbackKeyboardExt.CreateLikeDislikeKeyboard(foundUser));
+            }
+            else
+            {
+                await _client.SendTextMessageAsync(currentUser.UserId, 
+                    "Мы никого для тебя не нашли...\n" +
+                    "Просто пришли мне попозже какое-нибудь текстовое сообщение, чтобы проверить, появились ли новые пользователи!");
+            }
+        }
+
+        /// <summary>
+        /// Returns null if can't find anyone.
+        /// </summary>
+        public static User FindSomeoneForUser(User currentUser)
+        {
+            var checkedUserIds = currentUser.Likes.Select(like => like.CheckedUser.UserId);
+            var usersForSearch = UserContext.Users
+                .Where(u => u.UserId != currentUser.UserId)
+                .Where(u => u.ProfileCreatingState == null)
+                .Where(u => !checkedUserIds.Contains(u.UserId));
+
+            return usersForSearch.FirstOrDefault();
+        }
+
+        public static async void RemoveKeyboard(Telegram.Bot.Types.CallbackQuery cquery)
+        {
+            if (_client is null)
+                throw new NullReferenceException($"TelegramBotClient is not initialized yet. " +
+                                                 $"Call {typeof(BotWorker).Name}.Get() method first.");
+
+            await _client.EditMessageReplyMarkupAsync(cquery.Message.Chat.Id, cquery.Message.MessageId, replyMarkup: null);
         }
 
         public static AskAction FindAskAction(ProfileCreatingEnum pce)

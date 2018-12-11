@@ -23,8 +23,7 @@ namespace TelegramDating
 
             Console.WriteLine($"Listening: {me.FirstName}\n");
 
-            while (true)
-                Console.ReadKey();
+            while (true) ;
         }
 
     }

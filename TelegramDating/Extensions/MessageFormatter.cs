@@ -1,6 +1,6 @@
 ﻿using TelegramDating.Model;
 
-namespace TelegramDating.Global
+namespace TelegramDating.Extensions
 {
     public static class MessageFormatter
     {

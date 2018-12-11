@@ -1,5 +1,5 @@
 ﻿
-namespace TelegramDating.Global
+namespace TelegramDating.Shared
 {
     public static class EmojiConsts
     {

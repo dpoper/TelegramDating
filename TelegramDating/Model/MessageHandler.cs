@@ -3,6 +3,7 @@ using System.Linq;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types.Enums;
 using TelegramDating.Database;
+using TelegramDating.Extensions;
 using TelegramDating.Model;
 using TelegramDating.Model.Commands.AskActions;
 using TelegramDating.Model.Commands.Slash;
@@ -14,9 +15,12 @@ namespace TelegramDating
     {
         private static UserContext UserContext { get; set; } = Container.Current.Resolve<UserContext>();
 
-        internal static async void HandleMessage(object sender, MessageEventArgs messageEventArgs)
+        internal static void HandleMessage(object sender, MessageEventArgs messageEventArgs)
         {
             var message = messageEventArgs.ToMessage();
+
+            if (message == null)
+                return;
 
             Console.WriteLine($"Message: {message.MessageId} | {message.From.Username} | {message.Text}");
 
@@ -39,6 +43,8 @@ namespace TelegramDating
                 MessageHandler.CreatingProfileLoop(currentUser, message: message);
                 return;
             }
+            
+            BotWorker.SendNextProfileForLike(currentUser);
         }
 
         internal static void HandleCallbackQuery(object sender, CallbackQueryEventArgs callbackArgs)
@@ -60,6 +66,13 @@ namespace TelegramDating
                 MessageHandler.CreatingProfileLoop(currentUser, cquery: callback);
                 return;
             }
+
+            var like = CallbackKeyboardExt.ExtractLike(currentUser, callback.Data);
+            currentUser.Likes.Add(like);
+            UserContext.SaveChanges();
+
+            BotWorker.RemoveKeyboard(callback);
+            BotWorker.SendNextProfileForLike(currentUser);
         }
 
         private static void ExecuteAsCommand(User currentUser, string slashText)
@@ -80,6 +93,17 @@ namespace TelegramDating
         private static async void CreatingProfileLoop(User currentUser, Telegram.Bot.Types.Message message = null, Telegram.Bot.Types.CallbackQuery cquery = null)
         {
             AskAction currentAsk = BotWorker.FindAskAction(currentUser.ProfileCreatingState.Value);
+
+            if (currentAsk is IGotCallbackQuery)
+            {
+                if (cquery == null)
+                    return;
+            }
+            else
+            {
+                if (message == null)
+                    return;
+            }
 
             bool isValidated = currentAsk.Validate(currentUser, cquery: cquery, message: message);
 
@@ -132,6 +156,10 @@ namespace TelegramDating
             }
             else
             {
+                await Program.Bot.SendTextMessageAsync(currentUser.UserId,
+                    "Ура, ты зарегистрировался! Теперь мы попробуем найти кого-нибудь для тебя.");
+
+                BotWorker.SendNextProfileForLike(currentUser);
                 currentUser.ProfileCreatingState = null;
             }
 

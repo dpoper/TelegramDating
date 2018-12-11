@@ -1,6 +1,6 @@
 ﻿using TelegramDating.Model;
 
-namespace TelegramDating
+namespace TelegramDating.Extensions
 {
     public static class UserExt
     {
