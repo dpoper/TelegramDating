@@ -61,6 +61,8 @@ namespace TelegramDating.Model
         /// </summary>
         public string PictureId { get; set; }
 
+        public DateTime LastVisitAt { get; set; } = DateTime.Now;
+
         /// <summary>
         /// Current user's preferences
         ///     (Sex, City)

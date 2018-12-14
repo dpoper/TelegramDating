@@ -35,6 +35,9 @@ namespace TelegramDating.Bot
                 return;
             }
 
+            currentUser.LastVisitAt = DateTime.Now;
+            UserContext.SaveChanges();
+
             if (message.Type == MessageType.Text && message.Text.Length > 0 && message.Text[0] == '/')
             {
                 MessageHandler.ExecuteAsCommand(currentUser, message.Text);
@@ -50,7 +53,7 @@ namespace TelegramDating.Bot
             BotWorker.SendNextProfileForLike(currentUser);
         }
 
-        internal static async void HandleCallbackQuery(object sender, CallbackQueryEventArgs callbackArgs)
+        internal static void HandleCallbackQuery(object sender, CallbackQueryEventArgs callbackArgs)
         {
             var callback = callbackArgs.ToCallbackQuery();
 
@@ -69,6 +72,9 @@ namespace TelegramDating.Bot
                 BotWorker.StartNewUser(callback.From.Id, callback.From.Username);
                 return;
             }
+
+            currentUser.LastVisitAt = DateTime.Now;
+            UserContext.SaveChanges();
 
             if (currentUser.IsCreatingProfile())
             {
