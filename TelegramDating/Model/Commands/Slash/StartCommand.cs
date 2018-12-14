@@ -1,8 +1,10 @@
-﻿using TelegramDating.Model.Enums;
+﻿
+using System.ComponentModel;
 
 namespace TelegramDating.Model.Commands.Slash
 {
-    public class StartCommand : SlashCommand
+    [Description("с этого все начинали")]
+    internal class StartCommand : SlashCommand
     {
         public override string SlashText => "/start";
 

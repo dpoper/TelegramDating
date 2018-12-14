@@ -1,13 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.InputFiles;
 using TelegramDating.Extensions;
-using TelegramDating.Shared;
 
 namespace TelegramDating.Model.Commands.Slash
 {
-    class MyProfileCommand : SlashCommand
+    [Description("показать твою анкету")]
+    internal class MyProfileCommand : SlashCommand
     {
         public override string SlashText => "/myprofile";
 

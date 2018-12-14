@@ -1,7 +1,9 @@
-﻿
+﻿using System.ComponentModel;
+
 namespace TelegramDating.Model.Commands.Slash
 {
-    class ResetCommand : SlashCommand
+    [Description("начать всё с чистого листа!")]
+    internal class ResetCommand : SlashCommand
     {
         public override string SlashText => "/reset";
 

@@ -1,7 +1,7 @@
 ﻿
 namespace TelegramDating.Model.Commands.Slash
 {
-    class NoCommand : SlashCommand
+    internal class NoCommand : SlashCommand
     {
         public override string SlashText => null;
 

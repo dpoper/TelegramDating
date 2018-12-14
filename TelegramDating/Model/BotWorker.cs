@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
@@ -19,11 +18,12 @@ namespace TelegramDating.Model
         private static UserContext UserContext { get; set; } = Container.Current.Resolve<UserContext>();
 
         private static TelegramBotClient _client;
-        private static IReadOnlyList<SlashCommand> _slashCommandList = new SlashCommand[] {
-                                                                            new StartCommand(),
-                                                                            new ResetCommand(),
-                                                                            new MyProfileCommand(),
-                                                                      };
+        public static IReadOnlyList<SlashCommand> AvailableSlashCommandList { get; private set; } = new SlashCommand[] {
+                                                                                                        new HelpCommand(),
+                                                                                                        new StartCommand(),
+                                                                                                        new ResetCommand(),
+                                                                                                        new MyProfileCommand(),
+                                                                                                  };
 
         private static IList<AskAction> _profileCreatingAskActions =
             new List<AskAction>
@@ -143,7 +143,7 @@ namespace TelegramDating.Model
 
         public static SlashCommand FindSlashCommand(string messageText)
         {
-            return _slashCommandList.SingleOrDefault(cmd => messageText == cmd.SlashText);
+            return AvailableSlashCommandList.SingleOrDefault(cmd => messageText == cmd.SlashText);
         }
     }
 }
