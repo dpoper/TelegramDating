@@ -1,8 +1,8 @@
 ﻿using Telegram.Bot.Types.ReplyMarkups;
 using TelegramDating.Database;
-using TelegramDating.Model;
-using TelegramDating.Model.Enums;
 using TelegramDating.Shared;
+using TelegramDating.Model;
+using TelegramDating.Enums;
 
 namespace TelegramDating.Extensions
 {

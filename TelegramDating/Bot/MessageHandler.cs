@@ -4,12 +4,12 @@ using Telegram.Bot.Args;
 using Telegram.Bot.Types.Enums;
 using TelegramDating.Database;
 using TelegramDating.Extensions;
+using TelegramDating.Bot.Commands.AskActions;
+using TelegramDating.Bot.Commands.Slash;
+using TelegramDating.Enums;
 using TelegramDating.Model;
-using TelegramDating.Model.Commands.AskActions;
-using TelegramDating.Model.Commands.Slash;
-using TelegramDating.Model.Enums;
 
-namespace TelegramDating
+namespace TelegramDating.Bot
 {
     public static class MessageHandler
     {

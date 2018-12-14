@@ -1,4 +1,4 @@
-﻿namespace TelegramDating.Model.Enums
+﻿namespace TelegramDating.Enums
 {
     public static class SearchOptions
     {

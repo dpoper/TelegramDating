@@ -1,7 +1,7 @@
 ﻿using System;
 using Telegram.Bot;
 using TelegramDating.Database;
-using TelegramDating.Model;
+using TelegramDating.Bot;
 
 namespace TelegramDating
 {

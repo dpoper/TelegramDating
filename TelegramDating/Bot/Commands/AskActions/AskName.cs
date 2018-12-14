@@ -1,6 +1,7 @@
-﻿using TelegramDating.Model.Enums;
+﻿using TelegramDating.Enums;
+using TelegramDating.Model;
 
-namespace TelegramDating.Model.Commands.AskActions
+namespace TelegramDating.Bot.Commands.AskActions
 {
     internal class AskName : AskAction
     {

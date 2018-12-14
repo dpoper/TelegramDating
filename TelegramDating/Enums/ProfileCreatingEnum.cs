@@ -1,5 +1,5 @@
 ﻿
-namespace TelegramDating.Model.Enums
+namespace TelegramDating.Enums
 {
     public enum ProfileCreatingEnum
     {

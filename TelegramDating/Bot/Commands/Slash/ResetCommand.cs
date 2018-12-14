@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
+using TelegramDating.Model;
 
-namespace TelegramDating.Model.Commands.Slash
+namespace TelegramDating.Bot.Commands.Slash
 {
     [Description("начать всё с чистого листа!")]
     internal class ResetCommand : SlashCommand

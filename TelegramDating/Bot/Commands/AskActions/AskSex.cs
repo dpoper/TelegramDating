@@ -1,14 +1,14 @@
 ﻿using Telegram.Bot.Types;
+using TelegramDating.Enums;
 using TelegramDating.Extensions;
-using TelegramDating.Model.Enums;
 
-namespace TelegramDating.Model.Commands.AskActions
+namespace TelegramDating.Bot.Commands.AskActions
 {
     internal class AskSex : AskAction, IGotCallbackQuery
     {
         public override int Id => (int) ProfileCreatingEnum.Sex;
 
-        public override async void Ask(User currentUser)
+        public override async void Ask(Model.User currentUser)
         {
             await Program.Bot.SendTextMessageAsync(
                 currentUser.UserId,
@@ -17,7 +17,7 @@ namespace TelegramDating.Model.Commands.AskActions
             );
         }
 
-        public override bool Validate(User currentUser, CallbackQuery cquery = null, Message message = null)
+        public override bool Validate(Model.User currentUser, CallbackQuery cquery = null, Message message = null)
         {
             return message == null
                    && cquery != null
@@ -25,12 +25,12 @@ namespace TelegramDating.Model.Commands.AskActions
                        || cquery.Data == ((int) SearchOptions.Sex.Female).ToString());
         }
 
-        public override async void OnValidationFail(User currentUser)
+        public override async void OnValidationFail(Model.User currentUser)
         {
             await Program.Bot.SendTextMessageAsync(currentUser.UserId, "Просто нажми чёртову кнопку!");
         }
 
-        public override void OnSuccess(User currentUser, CallbackQuery cquery, Message message = null)
+        public override void OnSuccess(Model.User currentUser, CallbackQuery cquery, Message message = null)
         {
             BotWorker.RemoveKeyboard(cquery);
         }

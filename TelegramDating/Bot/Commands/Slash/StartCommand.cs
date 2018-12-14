@@ -1,7 +1,7 @@
-﻿
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using TelegramDating.Model;
 
-namespace TelegramDating.Model.Commands.Slash
+namespace TelegramDating.Bot.Commands.Slash
 {
     [Description("с этого все начинали")]
     internal class StartCommand : SlashCommand

@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-using TelegramDating.Database;
+﻿using TelegramDating.Database;
+using TelegramDating.Model;
 
-namespace TelegramDating.Model.Commands
+namespace TelegramDating.Bot.Commands
 {
     public abstract class Command
     {

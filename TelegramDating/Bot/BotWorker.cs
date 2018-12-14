@@ -5,11 +5,12 @@ using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
 using TelegramDating.Database;
 using TelegramDating.Extensions;
-using TelegramDating.Model.Commands.AskActions;
-using TelegramDating.Model.Commands.Slash;
-using TelegramDating.Model.Enums;
+using TelegramDating.Bot.Commands.AskActions;
+using TelegramDating.Bot.Commands.Slash;
+using TelegramDating.Enums;
+using TelegramDating.Model;
 
-namespace TelegramDating.Model
+namespace TelegramDating.Bot
 {
     public static class BotWorker
     {

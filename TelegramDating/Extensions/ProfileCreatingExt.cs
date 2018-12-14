@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using TelegramDating.Model.Commands.AskActions;
-using TelegramDating.Model.Enums;
+using TelegramDating.Bot.Commands.AskActions;
+using TelegramDating.Enums;
 
 namespace TelegramDating.Extensions
 {

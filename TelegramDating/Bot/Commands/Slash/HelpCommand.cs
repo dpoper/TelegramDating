@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Text;
 using TelegramDating.Extensions;
+using TelegramDating.Model;
 
-namespace TelegramDating.Model.Commands.Slash
+namespace TelegramDating.Bot.Commands.Slash
 {
     [Description("показать это окно :)")]
     internal class HelpCommand : SlashCommand

@@ -1,5 +1,5 @@
 ﻿
-namespace TelegramDating.Model.Commands.AskActions
+namespace TelegramDating.Bot.Commands.AskActions
 {
     public interface IGotCallbackQuery
     {

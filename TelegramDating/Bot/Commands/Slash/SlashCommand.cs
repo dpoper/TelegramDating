@@ -1,5 +1,5 @@
 ﻿
-namespace TelegramDating.Model.Commands.Slash
+namespace TelegramDating.Bot.Commands.Slash
 {
     /// <summary>
     /// Command that starts with the slash ('/') character.

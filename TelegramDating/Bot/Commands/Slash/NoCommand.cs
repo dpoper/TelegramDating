@@ -1,5 +1,7 @@
 ﻿
-namespace TelegramDating.Model.Commands.Slash
+using TelegramDating.Model;
+
+namespace TelegramDating.Bot.Commands.Slash
 {
     internal class NoCommand : SlashCommand
     {

@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel;
 using Telegram.Bot.Types.Enums;
 using TelegramDating.Extensions;
+using TelegramDating.Model;
 
-namespace TelegramDating.Model.Commands.Slash
+namespace TelegramDating.Bot.Commands.Slash
 {
     [Description("показать твою анкету")]
     internal class MyProfileCommand : SlashCommand
