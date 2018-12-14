@@ -68,8 +68,12 @@ namespace TelegramDating
             }
 
             var like = CallbackKeyboardExt.ExtractLike(currentUser, callback.Data);
-            currentUser.Likes.Add(like);
-            UserContext.SaveChanges();
+
+            if (!currentUser.Likes.Select(x => x.CheckedUser.Id).Contains(like.CheckedUser.Id))
+            {
+                currentUser.Likes.Add(like);
+                UserContext.SaveChanges();
+            }
 
             BotWorker.RemoveKeyboard(callback);
             BotWorker.SendNextProfileForLike(currentUser);
