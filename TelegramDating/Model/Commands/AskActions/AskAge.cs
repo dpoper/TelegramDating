@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Telegram.Bot.Types;
+﻿using Telegram.Bot.Types;
 using TelegramDating.Model.Enums;
 
 namespace TelegramDating.Model.Commands.AskActions
@@ -15,7 +14,7 @@ namespace TelegramDating.Model.Commands.AskActions
 
         public override bool Validate(User currentUser, CallbackQuery cquery = null, Message message = null)
         {
-            return AskAction.BaseTextValidation(cquery, message) && message.Text.All(char.IsDigit);
+            return AskAction.BaseTextValidation(cquery, message) && byte.TryParse(message.Text, out _);
         }
 
         public override async void OnValidationFail(User currentUser)
