@@ -48,11 +48,11 @@ namespace TelegramDating.Model
             if (_client != null) return _client;
 
             _client = new TelegramBotClient(token);
-
-            _client.StartReceiving();
+            
             _client.OnMessage       += MessageHandler.HandleMessage;
             _client.OnCallbackQuery += MessageHandler.HandleCallbackQuery;
-            
+            _client.StartReceiving();
+
             return _client;
 
         }
@@ -110,8 +110,7 @@ namespace TelegramDating.Model
         public static async void RemoveKeyboard(Telegram.Bot.Types.CallbackQuery cquery)
         {
             if (_client is null)
-                throw new NullReferenceException($"TelegramBotClient is not initialized yet. " +
-                                                 $"Call {typeof(BotWorker).Name}.Get() method first.");
+                throw new NullReferenceException($"TelegramBotClient is not initialized yet.");
 
             await _client.EditMessageReplyMarkupAsync(cquery.Message.Chat.Id, cquery.Message.MessageId, replyMarkup: null);
         }
@@ -144,6 +143,16 @@ namespace TelegramDating.Model
         public static SlashCommand FindSlashCommand(string messageText)
         {
             return AvailableSlashCommandList.SingleOrDefault(cmd => messageText == cmd.SlashText);
+        }
+
+        public static async void SendNoUsernameSetMessage(long userId)
+        {
+            if (_client is null)
+                throw new NullReferenceException($"TelegramBotClient is not initialized yet.");
+
+            await _client.SendTextMessageAsync(userId,
+                    "Упс! У тебя не проставлен юзернейм. Сделай так, чтобы к тебе можно было обращаться с собачкой. \n" +
+                    $"Как ко мне: @{Program.Bot.GetMeAsync().Result.Username}");
         }
     }
 }

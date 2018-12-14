@@ -19,8 +19,11 @@ namespace TelegramDating
         {
             var message = messageEventArgs.ToMessage();
 
-            if (message == null)
+            if (string.IsNullOrEmpty(message.From.Username))
+            {
+                BotWorker.SendNoUsernameSetMessage(message.From.Id);
                 return;
+            }
 
             Console.WriteLine($"Message: {message.MessageId} | {message.From.Username} | {message.Text}");
 
@@ -47,9 +50,15 @@ namespace TelegramDating
             BotWorker.SendNextProfileForLike(currentUser);
         }
 
-        internal static void HandleCallbackQuery(object sender, CallbackQueryEventArgs callbackArgs)
+        internal static async void HandleCallbackQuery(object sender, CallbackQueryEventArgs callbackArgs)
         {
             var callback = callbackArgs.ToCallbackQuery();
+
+            if (string.IsNullOrEmpty(callback.From.Username))
+            {
+                BotWorker.SendNoUsernameSetMessage(callback.From.Id);
+                return;
+            }
 
             Console.WriteLine($"Callback: {callback.Id} | {callback.From.Username} | {callback.Data}");
 
@@ -170,6 +179,5 @@ namespace TelegramDating
             UserContext.SaveChanges();
         }
     }
-
 }
 
