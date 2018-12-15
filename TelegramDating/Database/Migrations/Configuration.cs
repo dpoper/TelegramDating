@@ -1,5 +1,4 @@
 using System.Data.Entity.Migrations;
-using TelegramDating.Database;
 
 namespace TelegramDating.Database.Migrations
 {
@@ -8,6 +7,7 @@ namespace TelegramDating.Database.Migrations
         public Configuration()
         {
             this.AutomaticMigrationsEnabled = true;
+            this.AutomaticMigrationDataLossAllowed = true;
             this.ContextKey = "TelegramDating.Database.UserContext";
         }
     }

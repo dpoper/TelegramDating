@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using TelegramDating.Model;
 
 namespace TelegramDating.Bot.Commands.Slash
@@ -11,11 +12,13 @@ namespace TelegramDating.Bot.Commands.Slash
         public override async void Execute(User currentUser, string @params = "")
         {
             await Program.Bot.SendTextMessageAsync(currentUser.UserId, "Сбрасываем твой аккаунт...");
-            
-            currentUser = new User(currentUser.UserId, currentUser.Username);
+
+            currentUser.DeletedAt = DateTime.Now;
+            var newUser = new User(currentUser.UserId, currentUser.Username);
+            this.UserContext.Users.Add(newUser);
             this.UserContext.SaveChanges();
 
-            BotWorker.FindAskAction(0).Ask(currentUser);
+            BotWorker.FindAskAction(0).Ask(newUser);
         }
     }
 }

@@ -62,6 +62,8 @@ namespace TelegramDating.Model
         public string PictureId { get; set; }
 
         public DateTime LastVisitAt { get; set; } = DateTime.Now;
+        
+        public DateTime? DeletedAt { get; set; } = null;
 
         /// <summary>
         /// Current user's preferences
@@ -76,6 +78,8 @@ namespace TelegramDating.Model
 
         public ICollection<Like> Likes { get; set; } = new Collection<Like>();
 
+        public ICollection<Like> GotLikes { get; set; } = new Collection<Like>();
+
         /// <summary>
         /// Constructor for DB mapping.
         /// </summary>
@@ -84,7 +88,7 @@ namespace TelegramDating.Model
         /// <summary>
         /// Constructor for adding users into database.
         /// </summary>
-        public User(long userId, string username = "")
+        public User(long userId, string username)
         {
             this.UserId = userId;
             this.Username = username;
