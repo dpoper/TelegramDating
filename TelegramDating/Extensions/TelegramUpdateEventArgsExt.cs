@@ -8,12 +8,12 @@ namespace TelegramDating.Extensions
     {
         public static CallbackQuery ToCallbackQuery(this EventArgs callbackArgs)
         {
-            return (callbackArgs as CallbackQueryEventArgs)?.CallbackQuery;
+            return (callbackArgs as CallbackQueryEventArgs).CallbackQuery;
         }
 
         public static Message ToMessage(this EventArgs messageArgs)
         {
-            return (messageArgs as MessageEventArgs)?.Message;
+            return (messageArgs as MessageEventArgs).Message;
         }
     }
 }
