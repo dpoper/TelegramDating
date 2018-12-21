@@ -16,8 +16,8 @@ namespace TelegramDating.Database
 
         public User GetByUserId(long userId) => this.Users.SingleOrDefault(u => u.UserId == userId && !u.DeletedAt.HasValue);
 
-        public ICollection<Like> LoadLikes(long userId) => this.Users.Include(u => u.Likes).Include(u => u.GotLikes)
-                                                        .SingleOrDefault(u => u.UserId == userId && !u.DeletedAt.HasValue).Likes;
+        public ICollection<Like> LoadLikes(long id) => this.Users.Include(u => u.Likes).Include(u => u.GotLikes)
+                                                        .SingleOrDefault(u => u.Id == id && !u.DeletedAt.HasValue).Likes;
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

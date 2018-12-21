@@ -81,7 +81,7 @@ namespace TelegramDating.Bot
 
             var like = CallbackKeyboardExt.ExtractLike(currentUser, callback.Data);
 
-            var userLikes = this.UserContext.LoadLikes(currentUser.UserId);
+            var userLikes = this.UserContext.LoadLikes(currentUser.Id);
 
             if (!currentUser.Likes.Select(x => x.CheckedUser.Id).Contains(like.CheckedUser.Id))
             {
