@@ -10,7 +10,7 @@ namespace TelegramDating.Bot.Commands.AskActions
 
         public override async void Ask(Model.User currentUser)
         {
-            await Program.Bot.SendTextMessageAsync(
+            await this.BotWorker.Instance.SendTextMessageAsync(
                 currentUser.UserId,
                 "А кто ты у нас?",
                 replyMarkup: CallbackKeyboardExt.Sex
@@ -27,12 +27,12 @@ namespace TelegramDating.Bot.Commands.AskActions
 
         public override async void OnValidationFail(Model.User currentUser)
         {
-            await Program.Bot.SendTextMessageAsync(currentUser.UserId, "Просто нажми чёртову кнопку!");
+            await this.BotWorker.Instance.SendTextMessageAsync(currentUser.UserId, "Просто нажми чёртову кнопку!");
         }
 
         public override void OnSuccess(Model.User currentUser, CallbackQuery cquery, Message message = null)
         {
-            BotWorker.RemoveKeyboard(cquery);
+            this.BotWorker.RemoveKeyboard(cquery);
         }
     }
 }

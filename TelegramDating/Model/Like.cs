@@ -1,19 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
+﻿
 namespace TelegramDating.Model
 {
-    public sealed class Like
+    public sealed class Like : Entity
     {
-        [Key]
-        [Column(Order = 0)]
-        public long Id { get; set; }
-
         public User User { get; set; }
 
         public User CheckedUser { get; set; }
 
         public bool Liked { get; set; }
+
+        public bool? Answer { get; set; }
 
         public Like() { }
 

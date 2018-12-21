@@ -11,14 +11,14 @@ namespace TelegramDating.Bot.Commands.Slash
 
         public override async void Execute(User currentUser, string @params = "")
         {
-            await Program.Bot.SendTextMessageAsync(currentUser.UserId, "Сбрасываем твой аккаунт...");
+            await this.BotWorker.Instance.SendTextMessageAsync(currentUser.UserId, "Сбрасываем твой аккаунт...");
 
             currentUser.DeletedAt = DateTime.Now;
             var newUser = new User(currentUser.UserId, currentUser.Username);
             this.UserContext.Users.Add(newUser);
             this.UserContext.SaveChanges();
 
-            BotWorker.FindAskAction(0).Ask(newUser);
+            this.BotWorker.FindAskAction(0).Ask(newUser);
         }
     }
 }

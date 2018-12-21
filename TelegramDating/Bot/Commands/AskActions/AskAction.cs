@@ -7,6 +7,8 @@ namespace TelegramDating.Bot.Commands.AskActions
     {
         public abstract int Id { get; }
 
+        public BotWorker BotWorker { get; set; }
+
         public abstract void Ask(Model.User currentUser);
 
         public virtual void OnSuccess(Model.User currentUser, CallbackQuery cquery = null, Message message = null) { }

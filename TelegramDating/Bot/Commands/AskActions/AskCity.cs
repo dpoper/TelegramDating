@@ -9,7 +9,7 @@ namespace TelegramDating.Bot.Commands.AskActions
 
         public override async void Ask(User currentUser)
         {
-            await Program.Bot.SendTextMessageAsync(currentUser.UserId, "А город?");
+            await this.BotWorker.Instance.SendTextMessageAsync(currentUser.UserId, "А город?");
         }
     }
 }

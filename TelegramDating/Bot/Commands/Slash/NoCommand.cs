@@ -9,7 +9,7 @@ namespace TelegramDating.Bot.Commands.Slash
 
         public override async void Execute(User currentUser, string @params = "")
         {
-            await Program.Bot.SendTextMessageAsync(currentUser.UserId, "Нет такой команды, товарищ!");
+            await this.BotWorker.Instance.SendTextMessageAsync(currentUser.UserId, "Нет такой команды, товарищ!");
         }
     }
 }

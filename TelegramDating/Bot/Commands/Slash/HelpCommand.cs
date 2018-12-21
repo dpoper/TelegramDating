@@ -17,7 +17,7 @@ namespace TelegramDating.Bot.Commands.Slash
             foreach (SlashCommand cmd in BotWorker.AvailableSlashCommandList)
                 helpSb.Append($"{cmd.SlashText} - {cmd.GetDescription()}\n");
 
-            await Program.Bot.SendTextMessageAsync(currentUser.UserId, helpSb.ToString().Trim());
+            await this.BotWorker.Instance.SendTextMessageAsync(currentUser.UserId, helpSb.ToString().Trim());
         }
     }
 }

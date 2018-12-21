@@ -13,11 +13,11 @@ namespace TelegramDating.Bot.Commands.Slash
             var foundUser = this.UserContext.GetByUserId(currentUser.UserId);
             if (foundUser != null)
             {
-                await Program.Bot.SendTextMessageAsync(foundUser.UserId, 
+                await this.BotWorker.Instance.SendTextMessageAsync(foundUser.UserId, 
                     "Ты уже существуешь!\n" +
                     "Используй /reset для того, чтобы пересоздать аккаунт.");
 
-                //await Program.Bot.SendTextMessageAsync(message.Chat.Id, "Но мы, кажется, остановились на том, что...");
+                //await BotWorker.Instance.SendTextMessageAsync(message.Chat.Id, "Но мы, кажется, остановились на том, что...");
                 //foundUser.HandleAction(null);
 
                 return;
@@ -26,11 +26,11 @@ namespace TelegramDating.Bot.Commands.Slash
             this.UserContext.Users.Add(currentUser);
             this.UserContext.SaveChanges();
 
-            await Program.Bot.SendTextMessageAsync(currentUser.UserId,
+            await this.BotWorker.Instance.SendTextMessageAsync(currentUser.UserId,
                 "Привет!\n" +
                 "Заполни простую анкету, чтобы мы могли найти для тебя кого-нибудь.");
 
-            BotWorker.FindAskAction(0).Ask(currentUser);
+            this.BotWorker.FindAskAction(0).Ask(currentUser);
         }
     }
 }

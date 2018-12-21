@@ -14,11 +14,11 @@ namespace TelegramDating.Bot.Commands.Slash
         {
             if (currentUser.IsCreatingProfile())
             {
-                await Program.Bot.SendTextMessageAsync(currentUser.UserId, "Сперва заполни анкету полностью!");
+                await this.BotWorker.Instance.SendTextMessageAsync(currentUser.UserId, "Сперва заполни анкету полностью!");
                 return;
             }
 
-            await Program.Bot.SendPhotoAsync(
+            await this.BotWorker.Instance.SendPhotoAsync(
                 chatId: currentUser.UserId,
                 photo: currentUser.PictureId,
                 caption: MessageFormatter.FormatProfileMessage(currentUser), 

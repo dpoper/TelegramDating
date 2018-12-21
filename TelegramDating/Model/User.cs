@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using TelegramDating.Bot;
 using TelegramDating.Enums;
 
 namespace TelegramDating.Model
 {
-    public sealed class User
+    public sealed class User : Entity
     {
-        [Key]
-        [Column(Order = 0)]
-        public long Id { get; set; }
-
         /// <summary>
         /// Pass chat_id here.
         /// </summary>
@@ -74,7 +68,7 @@ namespace TelegramDating.Model
         /// <summary>
         /// Current user's profile state id.
         /// </summary>
-        public ProfileCreatingEnum? ProfileCreatingState { get; set; } = (ProfileCreatingEnum?) BotWorker.FindAskAction(0).Id;
+        public ProfileCreatingEnum? ProfileCreatingState { get; set; } = (ProfileCreatingEnum?) Container.Current.Resolve<BotWorker>().FindAskAction(0).Id;
 
         public ICollection<Like> Likes { get; set; } = new Collection<Like>();
 
@@ -94,6 +88,9 @@ namespace TelegramDating.Model
             this.Username = username;
         }
 
+        /// <summary>
+        /// Sets info properties depending on ProfileCreatingState value.
+        /// </summary>
         public void SetInfo(object infoObj)
         {
             if (!this.ProfileCreatingState.HasValue)
@@ -115,9 +112,7 @@ namespace TelegramDating.Model
                     break;
                 case ProfileCreatingEnum.City:      this.City = info;
                     break;
-                case ProfileCreatingEnum.Picture:
-                    if (infoObj is Telegram.Bot.Types.PhotoSize photo)
-                        this.PictureId = photo.FileId;
+                case ProfileCreatingEnum.Picture:   this.PictureId = (infoObj as Telegram.Bot.Types.PhotoSize).FileId;
                     break;
                 case ProfileCreatingEnum.SearchSex: this.SearchSex = (SearchOptions.Sex) Enum.Parse(typeof(SearchOptions.Sex), info);
                 break;

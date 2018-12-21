@@ -9,7 +9,7 @@ namespace TelegramDating.Bot.Commands.AskActions
 
         public override async void Ask(Model.User currentUser)
         {
-            await Program.Bot.SendTextMessageAsync(currentUser.UserId, "А сколько тебе лет?");
+            await this.BotWorker.Instance.SendTextMessageAsync(currentUser.UserId, "А сколько тебе лет?");
         }
 
         public override bool Validate(Model.User currentUser, CallbackQuery cquery = null, Message message = null)
@@ -19,7 +19,7 @@ namespace TelegramDating.Bot.Commands.AskActions
 
         public override async void OnValidationFail(Model.User currentUser)
         {
-            await Program.Bot.SendTextMessageAsync(currentUser.UserId, "Пришли мне цифру!");
+            await this.BotWorker.Instance.SendTextMessageAsync(currentUser.UserId, "Пришли мне цифру!");
         }
     }
 }

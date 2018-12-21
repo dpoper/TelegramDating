@@ -11,13 +11,13 @@ namespace TelegramDating.Bot.Commands.AskActions
 
         public override async void Ask(Model.User currentUser)
         {
-            await Program.Bot.SendTextMessageAsync(currentUser.UserId,
+            await this.BotWorker.Instance.SendTextMessageAsync(currentUser.UserId,
                 "Отлично! Последний штрих – твоё фото. Пришли мне изображение или ссылку на картинку.");
         }
 
         public override async void OnSuccess(Model.User currentUser, CallbackQuery cquery = null, Message message = null)
         {
-            await Program.Bot.SendTextMessageAsync(currentUser.UserId,
+            await this.BotWorker.Instance.SendTextMessageAsync(currentUser.UserId,
                 "Это ты? Красивый....");
         }
 
@@ -40,7 +40,7 @@ namespace TelegramDating.Bot.Commands.AskActions
 
         public override async void OnValidationFail(Model.User currentUser)
         {
-            await Program.Bot.SendTextMessageAsync(currentUser.UserId,
+            await this.BotWorker.Instance.SendTextMessageAsync(currentUser.UserId,
                 "Пришли мне изображение или ссылку на картинку!!");
         }
     }
