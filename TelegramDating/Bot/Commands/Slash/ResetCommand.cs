@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using TelegramDating.Enums;
 using TelegramDating.Model;
 
 namespace TelegramDating.Bot.Commands.Slash
@@ -15,6 +16,8 @@ namespace TelegramDating.Bot.Commands.Slash
 
             currentUser.DeletedAt = DateTime.Now;
             var newUser = new User(currentUser.UserId, currentUser.Username);
+            newUser.ProfileCreatingState = (ProfileCreatingEnum?) Container.Current.Resolve<BotWorker>().FindAskAction(0).Id;
+
             this.UserContext.Users.Add(newUser);
             this.UserContext.SaveChanges();
 

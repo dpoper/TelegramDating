@@ -79,7 +79,7 @@ namespace TelegramDating.Bot
                 return;
             }
 
-            var like = CallbackKeyboardExt.ExtractLike(currentUser, callback.Data);
+            var like = CallbackKeyboardExt.ExtractLike(callback.Data);
 
             if (!this.UserContext.LoadGotLikes(currentUser).Select(x => x.CheckedUser.Id).Contains(like.CheckedUser.Id))
             {

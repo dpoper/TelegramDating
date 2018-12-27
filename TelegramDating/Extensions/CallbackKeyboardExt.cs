@@ -3,13 +3,12 @@ using TelegramDating.Database;
 using TelegramDating.Shared;
 using TelegramDating.Model;
 using TelegramDating.Enums;
+using System;
 
 namespace TelegramDating.Extensions
 {
-    internal static class CallbackKeyboardExt
+    public static class CallbackKeyboardExt
     {
-        private static UserContext UserContext { get; set; } = Container.Current.Resolve<UserContext>();
-
         public static readonly InlineKeyboardMarkup Sex = new InlineKeyboardMarkup(new[]
         {
             InlineKeyboardButton.WithCallbackData("Мальчик", ((int)SearchOptions.Sex.Male).ToString()),
@@ -28,26 +27,42 @@ namespace TelegramDating.Extensions
 
 
 
-        public static InlineKeyboardMarkup CreateLikeDislikeKeyboard(User foundUser)
+        public static InlineKeyboardMarkup CreateLikeDislikeKeyboard(User profileUser, bool answer = false)
         {
+            var reqOrResp = answer ? "resp" : "req";
+
             return new InlineKeyboardMarkup(new[]
             {
                 new[]
                 {
-                    InlineKeyboardButton.WithCallbackData(EmojiConsts.Heart, $"true {foundUser.UserId}"),
-                    InlineKeyboardButton.WithCallbackData(EmojiConsts.BrokenHeart, $"false {foundUser.UserId}"),
+                    InlineKeyboardButton.WithCallbackData(EmojiConsts.Heart, $"{reqOrResp} {profileUser.UserId.ToString()} true"),
+                    InlineKeyboardButton.WithCallbackData(EmojiConsts.BrokenHeart, $"{reqOrResp} {profileUser.UserId.ToString()} false"),
                 },
             });
         }
 
-        public static Like ExtractLike(User currentUser, string callbackData)
+        public static Like ExtractLike(string callbackData, Like existingLikeForAnswer = null)
         {
             string[] args = callbackData.Split(' ');
 
-            bool liked = bool.Parse(args[0]);
+            bool isRequest = args[0] == "req";
             int userId = int.Parse(args[1]);
+            bool isLiked = bool.Parse(args[2]);
 
-            return new Like(UserContext.GetByUserId(userId), liked);
+            if (existingLikeForAnswer != null)
+            {
+                if (isRequest)
+                    throw new ArgumentException(nameof(existingLikeForAnswer) + " != null, но это реквест.");
+
+                existingLikeForAnswer.Response = isLiked;
+                return existingLikeForAnswer;
+            }
+
+            if (!isRequest)
+                throw new ArgumentException(nameof(existingLikeForAnswer) + " == null, но это респонс.");
+
+            var userContext = Container.Current.Resolve<UserContext>();
+            return new Like(userContext.GetByUserId(userId), isLiked);
         }
     }
 }

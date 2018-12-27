@@ -9,7 +9,7 @@ namespace TelegramDating.Model
 
         public bool Liked { get; set; }
 
-        public bool? Answer { get; set; }
+        public bool? Response { get; set; }
 
         public Like() { }
 

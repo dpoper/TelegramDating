@@ -68,7 +68,7 @@ namespace TelegramDating.Model
         /// <summary>
         /// Current user's profile state id.
         /// </summary>
-        public ProfileCreatingEnum? ProfileCreatingState { get; set; } = (ProfileCreatingEnum?) Container.Current.Resolve<BotWorker>().FindAskAction(0).Id;
+        public ProfileCreatingEnum? ProfileCreatingState { get; set; }
 
         public ICollection<Like> Likes { get; set; } = new Collection<Like>();
 

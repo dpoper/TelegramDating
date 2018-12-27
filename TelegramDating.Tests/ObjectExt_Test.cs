@@ -14,12 +14,18 @@ namespace TelegramDating.Tests
         private class MyClassWithoutDescriptionAttr { }
 
         [Test]
-        public void TryGetDescriptionAttribute()
+        public void GetDescription_FromClass_With_DescriptionAttribute()
         {
             var descWhereHasAttribute = typeof(MyClassWithDescriptionAttr).GetDescription();
-            var descWhereHasNoAttribute = typeof(MyClassWithoutDescriptionAttr).GetDescription();
-
+            
             Assert.AreEqual(expectedDescription, descWhereHasAttribute);
+        }
+
+        [Test]
+        public void GetDescription_FromClass_Without_DescriptionAttribute()
+        {
+            var descWhereHasNoAttribute = typeof(MyClassWithoutDescriptionAttr).GetDescription();
+            
             Assert.AreEqual(null, descWhereHasNoAttribute);
         }
 

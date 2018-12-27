@@ -62,6 +62,8 @@ namespace TelegramDating.Bot
         public User StartNewUser(long userId, string username)
         {
             User currentUser = new User(userId, username);
+            currentUser.ProfileCreatingState = (ProfileCreatingEnum?) Container.Current.Resolve<BotWorker>().FindAskAction(0).Id;
+
             this.FindSlashCommand("/start").Execute(currentUser);
             return currentUser;
         }
