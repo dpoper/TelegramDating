@@ -1,11 +1,11 @@
 ﻿
 namespace TelegramDating.Model
 {
-    public sealed class Like : Entity
+    public class Like : Entity
     {
-        public User User { get; set; }
-
-        public User CheckedUser { get; set; }
+        public virtual User User { get; set; }
+        
+        public virtual User CheckedUser { get; set; }
 
         public bool Liked { get; set; }
 

@@ -17,3 +17,5 @@
 [Rr]eleases/
 [Ll]og/
 [Pp]ackages/
+*.tmp
+/TelegramDating.Tests/bin/Debug/TelegramDating.Tests.dll.config

@@ -92,15 +92,14 @@ namespace TelegramDating.Bot
         /// </summary>
         public User FindSomeoneForUser(User currentUser)
         {
-            this.UserContext.LoadLikes(currentUser.Id);
-            IEnumerable<long> likedUserIds = currentUser.Likes.Select(like => like.CheckedUser.Id);
-            IEnumerable<long> gotLikesUserIds = currentUser.GotLikes.Select(like => like.User.Id);
+            IEnumerable<long> likedIds = this.UserContext.LoadLikes(currentUser).Select(like => like.CheckedUser.Id);
+            IEnumerable<long> gotLikesFromIds = this.UserContext.LoadGotLikes(currentUser).Select(like => like.User.Id);
             var usersForSearch = this.UserContext.Users
-                .Where(u => u.UserId != currentUser.UserId)       // Не я
-                .Where(u => u.ProfileCreatingState == null)       // Не создает профиль
-                .Where(u => u.DeletedAt == null)                  // Не мёртв
-                .Where(u => !likedUserIds.Contains(u.UserId))     // Я не видел его анкету
-                .Where(u => !gotLikesUserIds.Contains(u.UserId)); // Он не видел мою анкету
+                .Where(u => u.UserId != currentUser.UserId)   // Не я
+                .Where(u => u.ProfileCreatingState == null)   // Не создает профиль
+                .Where(u => u.DeletedAt == null)              // Не мёртв
+                .Where(u => !likedIds.Contains(u.Id))         // Я не видел его анкету
+                .Where(u => !gotLikesFromIds.Contains(u.Id)); // Он не видел мою анкету
 
             return usersForSearch.FirstOrDefault();
         }

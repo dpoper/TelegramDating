@@ -15,7 +15,7 @@ namespace TelegramDating.Bot.Commands.Slash
             var helpSb = new StringBuilder("Вот список доступных для тебя команд:\n\n"); 
 
             foreach (SlashCommand cmd in BotWorker.AvailableSlashCommandList)
-                helpSb.Append($"{cmd.SlashText} - {cmd.GetDescription()}\n");
+                helpSb.Append($"{cmd.SlashText} - {cmd.GetType().GetDescription()}\n");
 
             await this.BotWorker.Instance.SendTextMessageAsync(currentUser.UserId, helpSb.ToString().Trim());
         }

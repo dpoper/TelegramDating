@@ -3,11 +3,11 @@ using System.ComponentModel;
 
 namespace TelegramDating.Extensions
 {
-    internal static class ObjectExt
+    public static class ObjectExt
     {
-        public static string GetDescription(this object obj)
+        public static string GetDescription(this Type type)
         {
-            var descriptionAttr = Attribute.GetCustomAttribute(obj.GetType(), typeof(DescriptionAttribute)) as DescriptionAttribute;
+            var descriptionAttr = Attribute.GetCustomAttribute(type, typeof(DescriptionAttribute)) as DescriptionAttribute;
 
             return descriptionAttr.Description ?? "";
         }

@@ -18,7 +18,7 @@ namespace TelegramDating.Extensions
 
         public static Type ToType(this ProfileCreatingEnum profileCreatingEnum)
         {
-            return Assembly.GetTypes().SingleOrDefault(t => t.Name == "Ask" + profileCreatingEnum.ToString());
+            return Assembly.DefinedTypes.SingleOrDefault(t => t.Name == "Ask" + profileCreatingEnum.ToString());
         }
 
         public static int IndexOf(this IList<AskAction> askActionList, ProfileCreatingEnum profileCreatingEnum)

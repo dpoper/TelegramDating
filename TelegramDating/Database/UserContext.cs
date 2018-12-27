@@ -16,13 +16,28 @@ namespace TelegramDating.Database
 
         public User GetByUserId(long userId) => this.Users.SingleOrDefault(u => u.UserId == userId && !u.DeletedAt.HasValue);
 
-        public ICollection<Like> LoadLikes(long id) => this.Users.Include(u => u.Likes).Include(u => u.GotLikes)
-                                                        .SingleOrDefault(u => u.Id == id && !u.DeletedAt.HasValue).Likes;
+        public ICollection<Like> LoadLikes(User userWithNoLikesLoaded)
+        {
+            return this.Users.Include(u => u.Likes)
+                               .SingleOrDefault(u => u.Id == userWithNoLikesLoaded.Id && !u.DeletedAt.HasValue).Likes;
+            
+        }
+
+        public ICollection<Like> LoadGotLikes(User userWithNoLikesLoaded)
+        {
+            return this.Users.Include(u => u.Likes)
+                             .SingleOrDefault(u => u.Id == userWithNoLikesLoaded.Id && !u.DeletedAt.HasValue).Likes;
+
+        }
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Like>().HasRequired(x => x.User).WithMany(x => x.Likes).WillCascadeOnDelete(false);
-            modelBuilder.Entity<Like>().HasRequired(x => x.CheckedUser).WithMany(x => x.GotLikes).WillCascadeOnDelete(false);
+            modelBuilder.Entity<User>().HasMany(x => x.Likes)
+                                       .WithRequired(x => x.User).WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<User>().HasMany(x => x.GotLikes)
+                                       .WithRequired(x => x.CheckedUser).WillCascadeOnDelete(false);
         }
     }
 }
