@@ -9,7 +9,7 @@ namespace TelegramDating.Extensions
         {
             var descriptionAttr = Attribute.GetCustomAttribute(type, typeof(DescriptionAttribute)) as DescriptionAttribute;
 
-            return descriptionAttr.Description ?? "";
+            return descriptionAttr?.Description;
         }
     }
 }

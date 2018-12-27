@@ -6,17 +6,21 @@ namespace TelegramDating.Tests
     [TestFixture]
     public class ObjectExt_Test
     {
-        const string actualDescription = "myDesc";
+        const string expectedDescription = "myDesc";
 
-        [System.ComponentModel.Description(actualDescription)]
+        [System.ComponentModel.Description(expectedDescription)]
         private class MyClassWithDescriptionAttr { }
+        
+        private class MyClassWithoutDescriptionAttr { }
 
         [Test]
         public void TryGetDescriptionAttribute()
         {
-            var desc = typeof(MyClassWithDescriptionAttr).GetDescription();
+            var descWhereHasAttribute = typeof(MyClassWithDescriptionAttr).GetDescription();
+            var descWhereHasNoAttribute = typeof(MyClassWithoutDescriptionAttr).GetDescription();
 
-            Assert.AreEqual(actualDescription, desc);
+            Assert.AreEqual(expectedDescription, descWhereHasAttribute);
+            Assert.AreEqual(null, descWhereHasNoAttribute);
         }
 
     }
