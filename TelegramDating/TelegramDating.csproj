@@ -86,7 +86,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bot\Installer.cs" />
-    <Compile Include="Database\DatabaseExt.cs" />
     <Compile Include="Extensions\CallbackKeyboardExt.cs" />
     <Compile Include="Extensions\ObjectExt.cs" />
     <Compile Include="Bot\Commands\AskActions\AskAbout.cs" />
