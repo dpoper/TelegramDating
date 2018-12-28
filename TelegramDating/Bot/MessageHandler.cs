@@ -47,13 +47,15 @@ namespace TelegramDating.Bot
                 return;
             }
 
-            this.SendNextProfileForLike(currentUser);
+            if (!this.TrySendNextProfileForResponse(currentUser))
+                this.TrySendNextProfile(currentUser);
         }
 
         internal void HandleCallbackQuery(object sender, CallbackQueryEventArgs callbackArgs)
         {
             var callback = callbackArgs.ToCallbackQuery();
-            
+            this.RemoveKeyboard(callback);
+
             if (string.IsNullOrEmpty(callback.From.Username))
             {
                 this.SendNoUsernameSetMessage(callback.From.Id);
@@ -79,16 +81,27 @@ namespace TelegramDating.Bot
                 return;
             }
 
-            var like = CallbackKeyboardExt.ExtractLike(callback.Data);
+            this.UserContext.LoadGotLikes(currentUser);
 
-            if (!this.UserContext.LoadGotLikes(currentUser).Select(x => x.CheckedUser.Id).Contains(like.CheckedUser.Id))
+            // Response case
+            var firstGotLike = currentUser.GotLikes.FirstOrDefault(x => x.Response == null);
+            if (firstGotLike != null)
             {
-                currentUser.Likes.Add(like);
+                CallbackKeyboardExt.ExtractLike(callback.Data, firstGotLike);
                 this.UserContext.SaveChanges();
             }
-
-            this.RemoveKeyboard(callback);
-            this.SendNextProfileForLike(currentUser);
+            else // Request case
+            {
+                var like = CallbackKeyboardExt.ExtractLike(callback.Data);
+                if (!currentUser.GotLikes.Select(x => x.CheckedUser.Id).Contains(like.CheckedUser.Id))
+                {
+                    currentUser.Likes.Add(like);
+                    this.UserContext.SaveChanges();
+                }
+            }
+            
+            if (!this.TrySendNextProfileForResponse(currentUser))
+                this.TrySendNextProfile(currentUser);
         }
 
         private void ExecuteAsCommand(User currentUser, string slashText)
@@ -121,9 +134,9 @@ namespace TelegramDating.Bot
                     return;
             }
 
-            bool isValidated = currentAsk.Validate(currentUser, cquery: cquery, message: message);
+            bool isValid = currentAsk.Validate(currentUser, cquery: cquery, message: message);
 
-            if (!isValidated)
+            if (!isValid)
             {
                 currentAsk.OnValidationFail(currentUser);
                 return;
@@ -136,24 +149,20 @@ namespace TelegramDating.Bot
                 {
                     if (currentAsk is AskPicture)
                     {
-                        Telegram.Bot.Types.Message messageWithPhoto;
-
                         try
                         {
-                            messageWithPhoto = await this.Instance.SendPhotoAsync(currentUser.UserId, message.Text);
+                            Telegram.Bot.Types.Message messageWithPhoto = await this.Instance.SendPhotoAsync(currentUser.UserId, message.Text);
+                            currentUser.SetInfo(messageWithPhoto.Photo.Last());
                         }
                         catch
                         {
                             await this.Instance.SendTextMessageAsync(currentUser.UserId, "Что-то пошло не так. Кажется, ссылка битая.");
-                            return;
                         }
 
-                        currentUser.SetInfo(messageWithPhoto.Photo.Last());
+                        return;
                     }
-                    else
-                    { 
-                        currentUser.SetInfo(message.Text);
-                    }
+
+                    currentUser.SetInfo(message.Text);
                 }
                 else if (message.Type == MessageType.Photo && currentAsk is AskPicture)
                 {
@@ -175,7 +184,7 @@ namespace TelegramDating.Bot
                 await this.Instance.SendTextMessageAsync(currentUser.UserId,
                     "Ура, ты зарегистрировался! Теперь мы попробуем найти кого-нибудь для тебя.");
 
-                this.SendNextProfileForLike(currentUser);
+                this.TrySendNextProfile(currentUser);
                 currentUser.ProfileCreatingState = null;
             }
 

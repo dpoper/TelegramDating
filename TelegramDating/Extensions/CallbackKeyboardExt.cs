@@ -1,6 +1,5 @@
 ﻿using Telegram.Bot.Types.ReplyMarkups;
 using TelegramDating.Database;
-using TelegramDating.Shared;
 using TelegramDating.Model;
 using TelegramDating.Enums;
 using System;
@@ -9,6 +8,12 @@ namespace TelegramDating.Extensions
 {
     public static class CallbackKeyboardExt
     {
+        public static class EmojiConsts
+        {
+            public const string Heart = "❤️";
+            public const string BrokenHeart = "💔";
+        }
+
         public static readonly InlineKeyboardMarkup Sex = new InlineKeyboardMarkup(new[]
         {
             InlineKeyboardButton.WithCallbackData("Мальчик", ((int)SearchOptions.Sex.Male).ToString()),
@@ -27,9 +32,9 @@ namespace TelegramDating.Extensions
 
 
 
-        public static InlineKeyboardMarkup CreateLikeDislikeKeyboard(User profileUser, bool answer = false)
+        public static InlineKeyboardMarkup CreateLikeDislikeKeyboard(User profileUser, bool isForResponse = false)
         {
-            var reqOrResp = answer ? "resp" : "req";
+            var reqOrResp = isForResponse ? "resp" : "req";
 
             return new InlineKeyboardMarkup(new[]
             {

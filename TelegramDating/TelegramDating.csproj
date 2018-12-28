@@ -97,7 +97,6 @@
     <Compile Include="Container.cs" />
     <Compile Include="Database\UserContext.cs" />
     <Compile Include="Database\Installer.cs" />
-    <Compile Include="Shared\EmojiConsts.cs" />
     <Compile Include="Extensions\MessageFormatter.cs" />
     <Compile Include="Database\Migrations\Configuration.cs" />
     <Compile Include="Bot\BotWorker.cs" />

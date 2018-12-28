@@ -20,14 +20,12 @@ namespace TelegramDating.Database
         {
             return this.Users.Include(u => u.Likes)
                                .SingleOrDefault(u => u.Id == userWithNoLikesLoaded.Id && !u.DeletedAt.HasValue).Likes;
-            
         }
 
-        public ICollection<Like> LoadGotLikes(User userWithNoLikesLoaded)
+        public ICollection<Like> LoadGotLikes(User userWithNoGotLikesLoaded)
         {
-            return this.Users.Include(u => u.Likes)
-                             .SingleOrDefault(u => u.Id == userWithNoLikesLoaded.Id && !u.DeletedAt.HasValue).Likes;
-
+            return this.Users.Include(u => u.GotLikes)
+                             .SingleOrDefault(u => u.Id == userWithNoGotLikesLoaded.Id && !u.DeletedAt.HasValue).GotLikes;
         }
 
 

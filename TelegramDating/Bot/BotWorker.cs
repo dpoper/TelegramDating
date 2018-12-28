@@ -68,30 +68,31 @@ namespace TelegramDating.Bot
             return currentUser;
         }
 
-        public async void SendNextProfileForLike(User currentUser)
+        protected async void SendLikeDislikeKeyboard(User forUser, User profileUser, bool isForResponse = false)
         {
-            var foundUser = this.FindSomeoneForUser(currentUser);
-
-            if (foundUser != null)
-            {
-                await this.Instance.SendPhotoAsync(
-                    chatId: currentUser.UserId,
-                    photo: foundUser.PictureId,
-                    caption: MessageFormatter.FormatProfileMessage(foundUser),
-                    parseMode: ParseMode.Html,
-                    replyMarkup: CallbackKeyboardExt.CreateLikeDislikeKeyboard(foundUser));
-            }
-            else
-            {
-                await this.Instance.SendTextMessageAsync(currentUser.UserId, 
-                    "Мы никого для тебя не нашли...\n" +
-                    "Просто пришли мне попозже какое-нибудь текстовое сообщение, чтобы проверить, появились ли новые пользователи!");
-            }
+            await this.Instance.SendPhotoAsync(
+                chatId: forUser.UserId,
+                photo: profileUser.PictureId,
+                caption: MessageFormatter.FormatProfileMessage(profileUser, isForResponse),
+                parseMode: ParseMode.Html,
+                replyMarkup: CallbackKeyboardExt.CreateLikeDislikeKeyboard(profileUser, isForResponse));
         }
 
-        /// <summary>
-        /// Returns null if can't find anyone.
-        /// </summary>
+        public async void TrySendNextProfile(User forUser)
+        {
+            var profileUser = this.FindSomeoneForUser(forUser);
+
+            if (profileUser == null)
+            {
+                await this.Instance.SendTextMessageAsync(forUser.UserId,
+                    "Мы никого для тебя не нашли...\n" +
+                    "Просто пришли мне попозже какое-нибудь текстовое сообщение, чтобы проверить, появились ли новые пользователи!");
+                return;
+            }
+
+            this.SendLikeDislikeKeyboard(forUser, profileUser);
+        }
+
         public User FindSomeoneForUser(User currentUser)
         {
             IEnumerable<long> likedIds = this.UserContext.LoadLikes(currentUser).Select(like => like.CheckedUser.Id);
@@ -104,6 +105,27 @@ namespace TelegramDating.Bot
                 .Where(u => !gotLikesFromIds.Contains(u.Id)); // Он не видел мою анкету
 
             return usersForSearch.FirstOrDefault();
+        }
+
+        // Returns bool isSent.
+        public bool TrySendNextProfileForResponse(User forUser)
+        {
+            var profileUser = this.FindSomeoneFromGotLikes(forUser);
+
+            if (profileUser == null)
+                return false;
+
+            this.SendLikeDislikeKeyboard(forUser, profileUser, true);
+            return true;
+        }
+
+        public User FindSomeoneFromGotLikes(User currentUser)
+        {
+            //.Where(foundUser => currentUser.SearchSex == foundUser.Sex)
+            return this.UserContext.LoadGotLikes(currentUser)
+                                   .Where(x => x.User.ProfileCreatingState == null)
+                                   .Where(x => x.User.DeletedAt == null)
+                                   .FirstOrDefault(x => x.Response == null)?.User;
         }
 
         public async void RemoveKeyboard(Telegram.Bot.Types.CallbackQuery cquery)

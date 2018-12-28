@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using TelegramDating.Extensions;
 using TelegramDating.Model;
-using TelegramDating.Shared;
 
 namespace TelegramDating.Tests
 {
@@ -30,8 +29,8 @@ namespace TelegramDating.Tests
                                             .InlineKeyboard
                                             .First().ToArray();
 
-            Assert.AreEqual(EmojiConsts.Heart, buttons[0].Text);
-            Assert.AreEqual(EmojiConsts.BrokenHeart, buttons[1].Text);
+            Assert.AreEqual(CallbackKeyboardExt.EmojiConsts.Heart, buttons[0].Text);
+            Assert.AreEqual(CallbackKeyboardExt.EmojiConsts.BrokenHeart, buttons[1].Text);
 
             Assert.AreEqual("req 1337 true", buttons[0].CallbackData);
             Assert.AreEqual("req 1337 false", buttons[1].CallbackData);
@@ -42,12 +41,12 @@ namespace TelegramDating.Tests
         {
             var user = new User(1337, "durov");
 
-            var buttons = CallbackKeyboardExt.CreateLikeDislikeKeyboard(user, answer: true)
+            var buttons = CallbackKeyboardExt.CreateLikeDislikeKeyboard(user, isForResponse: true)
                                             .InlineKeyboard
                                             .First().ToArray();
 
-            Assert.AreEqual(EmojiConsts.Heart, buttons[0].Text);
-            Assert.AreEqual(EmojiConsts.BrokenHeart, buttons[1].Text);
+            Assert.AreEqual(CallbackKeyboardExt.EmojiConsts.Heart, buttons[0].Text);
+            Assert.AreEqual(CallbackKeyboardExt.EmojiConsts.BrokenHeart, buttons[1].Text);
 
             Assert.AreEqual("resp 1337 true", buttons[0].CallbackData);
             Assert.AreEqual("resp 1337 false", buttons[1].CallbackData);
