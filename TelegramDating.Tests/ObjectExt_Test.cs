@@ -22,7 +22,7 @@ namespace TelegramDating.Tests
         }
 
         [Test]
-        public void GetDescription_FromClass_Without_DescriptionAttribute()
+        public void GetDescription_FromClass_Without_DescriptionAttribute_ReturnNull()
         {
             var descWhereHasNoAttribute = typeof(MyClassWithoutDescriptionAttr).GetDescription();
             
