@@ -17,10 +17,10 @@ namespace TelegramDating.Extensions
                 user.Name, user.Age, user.Country, user.City, user.About);
         }
 
-		public static string GetMentionText(Telegram.Bot.Types.User tgUser)
+		public static string GetMentionText(User user)
 		{
-			int userId = tgUser.Id;
-			string displayedName = tgUser.FirstName ?? tgUser.LastName ?? tgUser.Username ?? "User";
+			long userId = user.UserId;
+			string displayedName = user.Name;
 
 			return string.Format(MessageFormatter.MentionTemplateHtml, userId.ToString(), displayedName);
 		}
