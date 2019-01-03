@@ -33,7 +33,7 @@ namespace TelegramDating.Bot.Commands.AskActions
 
         public override void OnSuccess(Model.User currentUser, CallbackQuery cquery, Message message = null)
         {
-            this.BotWorker.RemoveKeyboard(cquery);
+            //this.BotWorker.RemoveKeyboard(cquery);
         }
     }
 }
