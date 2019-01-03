@@ -68,15 +68,21 @@ namespace TelegramDating.Bot
             return currentUser;
         }
 
-        protected async void SendLikeDislikeKeyboard(User forUser, User profileUser, bool isForResponse = false)
-        {
-            await this.Instance.SendPhotoAsync(
-                chatId: forUser.UserId,
-                photo: profileUser.PictureId,
-                caption: MessageFormatter.FormatProfileMessage(profileUser, isForResponse),
-                parseMode: ParseMode.Html,
-                replyMarkup: CallbackKeyboardExt.CreateLikeDislikeKeyboard(profileUser, isForResponse));
-        }
+		protected async void SendLikeDislikeKeyboard(User forUser, User profileUser, bool isForResponse = false)
+		{
+			await this.Instance.SendPhotoAsync(
+				chatId: forUser.UserId,
+				photo: profileUser.PictureId,
+				caption: MessageFormatter.FormatProfileMessage(profileUser, isForResponse),
+				parseMode: ParseMode.Html,
+				replyMarkup: CallbackKeyboardExt.CreateLikeDislikeKeyboard(profileUser, isForResponse));
+		}
+
+		public async void NotifyMatchedBoth(User firstUser, User secondUser)
+		{
+			await this.Instance.SendTextMessageAsync(firstUser.UserId, MessageFormatter.GetYouHaveBeenMatchedText(secondUser), ParseMode.Html);
+			await this.Instance.SendTextMessageAsync(secondUser.UserId, MessageFormatter.GetYouHaveBeenMatchedText(firstUser), ParseMode.Html);
+		}
 
         public async void TrySendNextProfile(User forUser)
         {

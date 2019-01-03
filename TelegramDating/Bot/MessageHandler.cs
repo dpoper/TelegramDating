@@ -81,19 +81,26 @@ namespace TelegramDating.Bot
                 return;
             }
 
+			// После всех условий выше, этот CallbackQuery - определённо лайк/дизлайк.
+
             this.UserContext.LoadGotLikes(currentUser);
 
-            // Response case
-            var firstGotLike = currentUser.GotLikes.FirstOrDefault(x => x.Response == null);
-            if (firstGotLike != null)
+			// Response case
+			Like likeWithNoResponse = currentUser.GotLikes.FirstOrDefault(x => x.Response == null);
+            if (likeWithNoResponse != null)
             {
-                CallbackKeyboardExt.ExtractLike(callback.Data, firstGotLike);
+                CallbackKeyboardExt.ExtractLike(callback.Data, likeWithNoResponse);
                 this.UserContext.SaveChanges();
+
+				if (likeWithNoResponse.Response.Value) // if liked
+				{
+					this.NotifyMatchedBoth(likeWithNoResponse.User, likeWithNoResponse.CheckedUser);
+				}
             }
             else // Request case
             {
                 var like = CallbackKeyboardExt.ExtractLike(callback.Data);
-                if (!currentUser.GotLikes.Select(x => x.CheckedUser.Id).Contains(like.CheckedUser.Id))
+                if (!currentUser.GotLikes.Select(x => x.CheckedUser.Id).Contains(like.CheckedUser.Id)) // TODO: Нужно ли? Или переделать?
                 {
                     currentUser.Likes.Add(like);
                     this.UserContext.SaveChanges();

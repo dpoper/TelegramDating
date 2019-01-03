@@ -10,7 +10,9 @@ namespace TelegramDating.Extensions
 
 		public const string MentionTemplateHtml = "<a href=\"tg://user?id={0}\">{1}</a>";
 
-        public static string FormatProfileMessage(User user, bool isForResponse = false)
+		public const string YouHaveBeenMatchedHtml = "Ура, вы понравились друг другу! \n\nВот ссылка на чувака: {0}";
+
+		public static string FormatProfileMessage(User user, bool isForResponse = false)
         {
             return (isForResponse ? ForResponseTemplateText + "\n\n" : "") 
 				+ string.Format(MessageFormatter.ProfileMessageTemplateHtml,
@@ -23,6 +25,11 @@ namespace TelegramDating.Extensions
 			string displayedName = user.Name;
 
 			return string.Format(MessageFormatter.MentionTemplateHtml, userId.ToString(), displayedName);
+		}
+
+		public static string GetYouHaveBeenMatchedText(User matchedWith)
+		{
+			return string.Format(MessageFormatter.YouHaveBeenMatchedHtml, MessageFormatter.GetMentionText(matchedWith));
 		}
     }
 }
