@@ -136,7 +136,14 @@ namespace TelegramDating.Bot
 
         public async void RemoveKeyboard(Telegram.Bot.Types.CallbackQuery cquery)
         {
-            await this.Instance.EditMessageReplyMarkupAsync(cquery.Message.Chat.Id, cquery.Message.MessageId, replyMarkup: null);
+			try
+			{
+				await this.Instance.EditMessageReplyMarkupAsync(cquery.Message.Chat.Id, cquery.Message.MessageId, replyMarkup: null);
+			}
+			catch (Telegram.Bot.Exceptions.MessageIsNotModifiedException)
+			{
+				Console.WriteLine("Message is not modified. Я и так знаю, что изменил только реплай маркап.");
+			}
         }
 
         public AskAction FindAskAction(ProfileCreatingEnum pce)
